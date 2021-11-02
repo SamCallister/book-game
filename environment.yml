@@ -1,0 +1,6 @@
+name: book_game
+dependencies:
+  - python=3.8
+  - pip:
+    - nltk
+    - Gutenberg=0.8.1
