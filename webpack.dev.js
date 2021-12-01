@@ -12,6 +12,7 @@ module.exports = merge(common, {
 	devServer: {
 		liveReload: true,
 		watchFiles: ['public/index.html', 'src/js/**/*.js'],
-		static: { serveIndex: false }
+		static: { serveIndex: false },
+		port: 4000
 	}
 });
