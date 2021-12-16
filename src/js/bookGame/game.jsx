@@ -7,9 +7,19 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import Button from '@material-ui/core/Button';
 
 
-const styles = makeStyles({
+const styles = makeStyles((theme) => ({
+	cardContainer: {
+		marginTop: theme.spacing(4),
+		marginBottom: theme.spacing(4),
+		width: "60%"
+	},
+	cardOverride: {
+		padding: theme.spacing(2)
+	},
 	container: {
 		display: "flex",
 		justifyContent: "center"
@@ -18,15 +28,35 @@ const styles = makeStyles({
 		flexGrow: 0.4,
 		maxWidth: "65%"
 	},
-	svgResponsive: {
-	},
-	outerSvgContainer: {position: "relative"},
-	arrowsContainer: {
-		display:"flex",
+	gameOverContainer: {
+		display: "flex",
 		justifyContent: "center"
 	},
-	hide: { visibility: "hidden"}
-});
+	gameOverTextContainer: {
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+		marginBottom: theme.spacing(2)
+	},
+	gameOverText: {
+		fontSize: "xxx-large"
+	},
+	numCorrectText: {
+		fontSize: "x-large"
+	},
+	gameOverButtonsContainer: {
+		marginTop: theme.spacing(3)
+	},
+	gameOverShowQuestionsButton: {
+		marginRight: theme.spacing(2)
+	},
+	buttomAnotherGameButton: { width: "100%" },
+	arrowsContainer: {
+		display: "flex",
+		justifyContent: "center"
+	},
+	hide: { visibility: "hidden" }
+}));
 
 
 
@@ -38,21 +68,22 @@ function Game(props) {
 	const [numCorrect, setNumCorrect] = React.useState(0);
 	const [gameOver, setGameOver] = React.useState(false);
 	const [answers, setAnswers] = React.useState({});
+	const [showQuestions, setShowQuestions] = React.useState(false);
 
 	const numQuestions = gameData.questions.length;
-	
+
 
 	const questionAnswered = (wasCorrect, answer) => {
 		setAnsweredUntil(currentQuestionIndex + 1);
 
-		if(wasCorrect) {
+		if (wasCorrect) {
 			setNumCorrect(numCorrect + 1);
 		}
 
 		const newAnswer = {};
 		newAnswer[currentQuestionIndex] = answer;
 
-		setAnswers({...answers, ...newAnswer});
+		setAnswers({ ...answers, ...newAnswer });
 	}
 
 
@@ -60,12 +91,12 @@ function Game(props) {
 
 		// handle if on final question here
 		const nextQuestionIndex = currentQuestionIndex + 1;
-		if(nextQuestionIndex == numQuestions) {
+		if (nextQuestionIndex == numQuestions) {
 			setGameOver(true);
 		} else {
 			setCurrentQuestionIndex(nextQuestionIndex);
 		}
-		
+
 	};
 
 	const prevQuestion = () => {
@@ -74,7 +105,7 @@ function Game(props) {
 		setCurrentQuestionIndex(prevQuestionIndex);
 	};
 
-	
+
 	return (
 		<Container maxWidth="lg" className={s.container}>
 			{!gameOver && (<div className={s.content}>
@@ -87,16 +118,16 @@ function Game(props) {
 				/>
 				<div className={s.arrowsContainer}>
 					<div>
-						<span className={ currentQuestionIndex != 0 ? '': s.hide}>
-						<IconButton aria-label="back"
-									onClick={prevQuestion}>
+						<span className={currentQuestionIndex != 0 ? '' : s.hide}>
+							<IconButton aria-label="back"
+								onClick={prevQuestion}>
 								<ArrowBack />
-						</IconButton>
+							</IconButton>
 						</span>
 						<Typography display="inline">{currentQuestionIndex + 1} of {numQuestions}</Typography>
-						 <span className={ answeredUntil != currentQuestionIndex ? '': s.hide}>
+						<span className={answeredUntil != currentQuestionIndex ? '' : s.hide}>
 							<IconButton aria-label="next"
-										onClick={nextQuestion}>
+								onClick={nextQuestion}>
 								<ArrowForward />
 							</IconButton>
 						</span>
@@ -104,7 +135,23 @@ function Game(props) {
 				</div>
 			</div>)}
 			{gameOver && (<div className={s.content}>
-				The game is over! You got {numCorrect} of {numQuestions} correct.
+				<div className={s.gameOverContainer}>
+				<div className={s.cardContainer}>
+					<Card variant="outlined" className={s.cardOverride}>
+						<div className={s.gameOverTextContainer}>
+							<div className={s.gameOverText}>Game over!</div>
+							<div className={s.numCorrectText}>You got {numCorrect} of {numQuestions} correct.</div>
+							<div className={s.gameOverButtonsContainer}>
+								<Button variant="outlined"
+									className={s.gameOverShowQuestionsButton}
+									onClick={() => setShowQuestions(true)}>Show Questions</Button>
+								<Button variant="outlined">Another Game</Button>
+							</div>
+						</div>
+					</Card>
+				</div>
+				</div>
+				<div className={showQuestions ? '' : s.hide}>
 				{gameData.questions.map((d, i) => {
 					return (<QuestionSvg
 						key={i + 100}
@@ -112,7 +159,11 @@ function Game(props) {
 						questionAnswered={questionAnswered}
 						providedAnswer={answers[i]}
 					/>)
-				})}
+				}
+				)}
+				<Button className={s.buttomAnotherGameButton} variant="outlined">Another Game</Button>
+				</div>
+
 			</div>)}
 		</Container>);
 }

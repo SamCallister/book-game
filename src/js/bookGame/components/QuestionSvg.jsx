@@ -11,7 +11,7 @@ import * as d3 from 'd3';
 const width = 500;
 const height = 300;
 
-const styles = makeStyles((theme) => ({
+const styles = makeStyles(() => ({
 	outerSvgContainer: {
 		border: "1px solid black"
 	}
