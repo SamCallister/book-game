@@ -1,9 +1,11 @@
 const margin = {
 	top: 60,
-	right: 60,
+	right: 100,
 	bottom: 60,
-	left: 60
+	left: 100
 };
+
+const animationDuration = 1000;
 
 function drawOrUpdateAxis(svg, className, translateValue, callable, addLabel) {
 	const selection = svg.select(`.${className}`);
@@ -32,7 +34,7 @@ function addXAxisLabel(svg, label, margin, width, height) {
 }
 
 function addYAxisLabel(svg, label, margin, height) {
-	const x = 2;
+	const x = (margin.left / 2) - 10;
 	const y = margin.top + ((height - margin.top - margin.bottom) / 2)
 	svg.append("text")
 		.attr("transform", `rotate(-90, ${x}, ${y})`)

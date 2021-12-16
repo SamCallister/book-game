@@ -7,7 +7,7 @@
 		"starter": "./node_modules/.bin/webpack --watch --config webpack.dev.js",
 		"build": "./node_modules/.bin/webpack --config webpack.prod.js",
 		"pack": "./node_modules/.bin/webpack",
-		"lint": "npx eslint src"
+		"lint": "npx eslint src/js"
 	},
 	"author": "",
 	"license": "ISC",

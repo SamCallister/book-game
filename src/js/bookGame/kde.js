@@ -13,15 +13,11 @@ function draw(svg, questionData, width, height) {
 	const combinedX = otherPoints.map((d) => d[0]).concat(answerPoints.map((d) => d[0]));
 	const combinedY = otherPoints.map((d) => d[1]).concat(answerPoints.map((d) => d[1]));
 
-	const maxX = d3.max(combinedX);
-	const maxY = d3.max(combinedY);
-
 	// setup xscale
 	const x = d3.scaleLinear()
 		.domain(d3.extent(combinedX)).nice()
 		.range([svgUtil.margin.left, width - svgUtil.margin.right]);
 
-	const [xStart, xStop] = x.domain();
 
 	// setup yscale
 	const y = d3.scaleLinear()

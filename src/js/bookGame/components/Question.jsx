@@ -3,16 +3,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormLabel from '@material-ui/core/FormLabel';
-import Button from '@material-ui/core/Button';
-
+import Typography from '@material-ui/core/Typography';
 
 
 const useStyles = makeStyles((theme) => ({
   answersContainer: {
-    margin: theme.spacing(3),
+    margin: theme.spacing(3)
   },
   button: {
     margin: theme.spacing(1, 1, 0, 0),
@@ -74,7 +70,7 @@ export default function Question(props) {
 
   return (
     <div className={s.answersContainer}>
-      <div className={s.questionText}>{data.text}</div>
+      <div className={s.questionText}><Typography>{data.text}</Typography></div>
       <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
         {data.answers.map((q) => {
           const chosenClass = getClassBasedOnAnswer(q.id, data.correct_answer.id, value);
