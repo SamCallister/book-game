@@ -18,7 +18,8 @@ kernel_bandwidth = 1.5
 outlier_quantile = 0.98
 
 basic_stopwords_set = set(stopwords.words('english'))
-punctuation_set = set(string.punctuation).union({'”', '’', '``','“', "''", "n't", "--", "'ll" })
+punctuation_set = set(string.punctuation).union(
+    {'”', '’', '``', '“', "''", "n't", "--", "'ll"})
 custom_stop_words = {'mr.', 'miss', 'mrs.', 'said', 'mr', 'mrs', 'th'}
 all_stop_words = basic_stopwords_set.union(
     punctuation_set).union(custom_stop_words)
@@ -28,7 +29,7 @@ def unique_and_score_kde(kde, X):
     X_unique = np.unique(X)
     Y = np.exp(kde.score_samples(X_unique.reshape(len(X_unique), 1)))
     result = np.concatenate((np.array([0, 0]).reshape(2, 1),
-                          np.unique(np.array((X_unique, Y)), axis=1)), axis=1)
+                             np.unique(np.array((X_unique, Y)), axis=1)), axis=1)
 
     return [tuple(r) for r in result.T]
 
@@ -83,7 +84,7 @@ def word_length_question(q):
 
     return dict(correct_answer=q["answers"][max_avg_index],
                 data=dict(all_points=unique_and_score_kde(kde_all, all_book_length),
-                   answer_points=unique_and_score_kde(kde_answer, answer_word_lengh)))
+                          answer_points=unique_and_score_kde(kde_answer, answer_word_lengh)))
 
 
 def sentence_length_question(q):
@@ -93,10 +94,10 @@ def sentence_length_question(q):
         get_sentence_lengths_num_words(text) for text in books]
     # get max sentence length
     max_sent_length = max([l for sent_lengths in book_sent_lengths
-        for l in sent_lengths])
+                           for l in sent_lengths])
 
     probability_vecs = np.array([get_probability_vec(lengths, max_sent_length)
-     for lengths in book_sent_lengths])
+                                 for lengths in book_sent_lengths])
 
     avg_prob_vec = probability_vecs.mean(axis=0)
 
@@ -108,7 +109,7 @@ def sentence_length_question(q):
     # get kde estimates
     other_sent_length = trim_sent_len_outliers(
         np.array(sorted([s for i, sents in enumerate(book_sent_lengths) if i != index_of_most_different
-         for s in sents]))
+                         for s in sents]))
     )
     answer_sent_length = trim_sent_len_outliers(
         np.array(sorted(book_sent_lengths[index_of_most_different]))
@@ -122,7 +123,7 @@ def sentence_length_question(q):
 
     return dict(correct_answer=q["answers"][index_of_most_different],
                 data=dict(other_points=unique_and_score_kde(kde_others, other_sent_length),
-                   answer_points=unique_and_score_kde(kde_answer, answer_sent_length)))
+                          answer_points=unique_and_score_kde(kde_answer, answer_sent_length)))
 
 
 # get data for questions
@@ -148,7 +149,7 @@ def pos_quesiton(q):
 
 def get_tf_idf_question(q):
     books = [load_and_strip(book_id)
-            for book_id in q["answers"]]
+             for book_id in q["answers"]]
     vectorizer = TfidfVectorizer(stop_words=all_stop_words)
     X = vectorizer.fit_transform(books)
     df = pd.DataFrame(
@@ -163,16 +164,18 @@ def get_tf_idf_question(q):
         for i, v in df.T.iloc[:, index_of_correct_answer].sort_values(ascending=False)[:q["meta"]["num_words"]].iteritems()
     ]
 
+
 def filter_words(words):
     return [
         w for w in words
         if w not in all_stop_words
     ]
 
+
 def get_words_per_book(book_ids):
     return [
         filter_words(nltk.word_tokenize(str.lower(load_and_strip(book_id))))
-            for book_id in book_ids
+        for book_id in book_ids
     ]
 
 
@@ -180,7 +183,7 @@ def get_unique_words(words_per_book, correct_answer_index):
     correct_words = words_per_book[correct_answer_index]
 
     other_sets = set([word for i, words in enumerate(words_per_book)
-                 for word in words if i != correct_answer_index])
+                      for word in words if i != correct_answer_index])
 
     return set(correct_words) - other_sets
 
@@ -207,19 +210,20 @@ def get_unique_longest(q):
     punc_set = set(string.punctuation).union('—')
 
     return [w for _, w in words_sorted_by_length
-    if not set(punc_set).intersection(set(w))][:q["meta"]["num_words"]]
+            if not set(punc_set).intersection(set(w))][:q["meta"]["num_words"]]
 
 
 @lru_cache
 def get_tagged_words_for_book(book_id):
-	book = load_and_strip(book_id)
+    book = load_and_strip(book_id)
 
-	sents = [nltk.word_tokenize(str.lower(s)) for s in nltk.sent_tokenize(book)]
-	tagged_sents = nltk.pos_tag_sents(sents)
-	tagged_words = [w for s in tagged_sents
-                      for w in s]
+    sents = [nltk.word_tokenize(str.lower(s))
+             for s in nltk.sent_tokenize(book)]
+    tagged_sents = nltk.pos_tag_sents(sents)
+    tagged_words = [w for s in tagged_sents
+                    for w in s]
 
-	return [x for x in tagged_words
+    return [x for x in tagged_words
             if x[0] not in all_stop_words]
 
 
@@ -236,7 +240,7 @@ def noun_to_verb_ratio_question(q):
         book_id) for book_id in q["answers"]]
 
     counts = [dict(noun_count=len(get_nouns(w)),
-          verb_count=len(get_verbs(w))) for w in tagged_by_book]
+                   verb_count=len(get_verbs(w))) for w in tagged_by_book]
 
     noun_to_verb = [d["noun_count"] / d["verb_count"] for d in counts]
 
@@ -269,28 +273,36 @@ def id_to_info(books_map, i):
     entry = books_map[i]
     return dict(id=i,
                 title=entry["title"],
-               author=entry["author"])
+                author=entry["author"])
 
 
-def main():
-    game_data = json.loads(Path('book_data/game_1.json').read_text())
+def build_game(path_to_game_json):
+    game_data = json.loads(Path(path_to_game_json).read_text())
     books = game_data["books"]
     book_map = {b["id"]: b for b in books}
     answer_ids = [b["id"] for b in books]
-    questions = [{**q, **dict(answers=answer_ids)} for q in game_data["questions"]]
+    questions = [{**q, **dict(answers=answer_ids)}
+                 for q in game_data["questions"]]
 
     finished_questions = [process_question(q) for q in questions]
 
     final_questions = [
         {**q,
-        **{"correct_answer": id_to_info(book_map, q["correct_answer"])},
-        **{"answers": [id_to_info(book_map, a_id) for a_id in q["answers"]]}} for q in finished_questions
+         **{"correct_answer": id_to_info(book_map, q["correct_answer"])},
+         **{"answers": [id_to_info(book_map, a_id) for a_id in q["answers"]]}} for q in finished_questions
     ]
+
+    return dict(questions=final_questions, books=books)
+
+
+def main():
+    games = [build_game('book_data/game_1.json'), build_game('book_data/game_1.json')]
 
     output_path = Path.cwd().parent.parent / 'public' / 'data'
     output_path.mkdir(parents=True, exist_ok=True)
-    (output_path / 'questions.json').write_text(json.dumps(dict(questions=final_questions)))
+    (output_path / 'games.json').write_text(json.dumps(games))
+    
 
 
 if __name__ == "__main__":
-	main()
+    main()

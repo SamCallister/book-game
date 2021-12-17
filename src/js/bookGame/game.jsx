@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import QuestionSvg from './components/QuestionSvg.jsx';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForward from '@material-ui/icons/ArrowForward';
@@ -62,7 +64,9 @@ const styles = makeStyles((theme) => ({
 
 function Game(props) {
 	const s = styles();
-	const { gameData } = props;
+	const params = useParams();
+	const { games } = props;
+	const gameData = games[params.gameIndex];
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [answeredUntil, setAnsweredUntil] = useState(0);
 	const [numCorrect, setNumCorrect] = React.useState(0);
@@ -145,7 +149,7 @@ function Game(props) {
 								<Button variant="outlined"
 									className={s.gameOverShowQuestionsButton}
 									onClick={() => setShowQuestions(true)}>Show Questions</Button>
-								<Button variant="outlined">Another Game</Button>
+								<Link to="/">Select another quiz</Link>
 							</div>
 						</div>
 					</Card>

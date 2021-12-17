@@ -2,18 +2,22 @@
 	"books": [{
 		"title": "Hamlet, Prince of Denmark",
 		"author": "William Shakespeare",
+        "img":"hamlet.jpg",
 		"id": 1524
 	},{
 		"title": "A Christmas Carol in Prose; Being a Ghost Story of Christmas",
 		"author": "Charles Dickens",
+        "img":"christmas_carol.jpg",
 		"id": 46
 	},{
 		"title": "Pride and Prejudice",
 		"author": "Jane Austen",
+        "img":"pride_and_prejudice.jpg",
 		"id": 1342
 	},{
 		"title": "In our time",
 		"author": "Ernest Hemingway",
+        "img":"in_our_time.jpg",
 		"id": 61085
 	}],
 	"questions": [
