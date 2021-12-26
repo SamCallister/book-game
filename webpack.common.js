@@ -20,6 +20,17 @@ module.exports = {
 			use: ["babel-loader"]
 		},
 		{
+			test: /\.(png|jpg|gif)$/i,
+			use: [
+				{
+					loader: 'url-loader',
+					options: {
+						limit: 5000,
+					},
+				},
+			],
+		},
+		{
 			test: /\.css$/i,
 			exclude: [
 				path.resolve(__dirname, "node_modules"),
@@ -32,5 +43,5 @@ module.exports = {
 	resolve: {
 		extensions: [".json", ".js", ".jsx"],
 	},
-	
+
 };

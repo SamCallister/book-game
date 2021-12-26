@@ -62,6 +62,9 @@ const styles = makeStyles((theme) => ({
 		textAlign: "center",
 		margin: theme.spacing(2)
 	},
+	selectAnotherQuizText: {
+		fontSize: "large"
+	},
 	hide: { visibility: "hidden" }
 }));
 
@@ -175,7 +178,7 @@ function Game(props) {
 									<Button variant="outlined"
 										className={s.gameOverShowQuestionsButton}
 										onClick={() => setShowQuestions(true)}>Show Questions</Button>
-									<Link to="/">Select another quiz</Link>
+									<span className={s.selectAnotherQuizText}><Link to="/">Select another quiz</Link></span>
 								</div>
 							</div>
 						</Card>
@@ -191,7 +194,7 @@ function Game(props) {
 						/>)
 					}
 					)}
-					<div className={s.anotherQuizBottomContainer}>
+					<div className={`${s.anotherQuizBottomContainer} ${s.selectAnotherQuizText}`}>
 						<Link to="/">Select another quiz</Link>
 					</div>
 				</div>

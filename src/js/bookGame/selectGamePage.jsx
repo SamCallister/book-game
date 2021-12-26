@@ -10,11 +10,10 @@ const styles = makeStyles((theme) => ({
 	container: {
 	},
 	explainerTextContainer: {
-		textAlign: "horizontal",
+		textAlign: "center",
 		margin: theme.spacing(2)
 	},
 	bookGameContainer: {
-		margin: theme.spacing(2)
 	},
 	bookImage: {
 		width: "200px",
@@ -23,7 +22,8 @@ const styles = makeStyles((theme) => ({
 	},
 	linkContainer: {
 		width: "100%",
-		textAlign: "center"
+		textAlign: "center",
+		fontSize: "large"
 	},
 	twoQuizRow: {
 		display: "flex",
@@ -64,7 +64,7 @@ function SelectGamePage(props) {
 
 	return (<Container maxWidth="lg" className={s.container}>
 		<div className={s.explainerTextContainer}> <Typography variant="h4" gutterBottom component="div">
-			Choose a quiz to start. Every question in the quiz will be based on the four books shown. Pick a group of books you know something about!
+			Each question in a quiz is based on the four books above it.
 		</Typography></div>
 		{quizGroups.map((groupItems, groupIndex) => {
 			return (<div key={groupIndex} className={s.twoQuizRow}>
