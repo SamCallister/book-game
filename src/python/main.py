@@ -296,7 +296,7 @@ def build_game(path_to_game_json):
 
 
 def main():
-    games = [build_game('book_data/game_1.json'), build_game('book_data/game_1.json')]
+    games = [build_game('book_data/game_1.json'), build_game('book_data/game_2.json')]
 
     output_path = Path.cwd().parent.parent / 'public' / 'data'
     output_path.mkdir(parents=True, exist_ok=True)

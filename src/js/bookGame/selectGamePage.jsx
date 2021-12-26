@@ -1,12 +1,20 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from "react-router-dom";
+import Typography from '@material-ui/core/Typography';
 
 import Container from '@material-ui/core/Container';
 import { chunk } from 'lodash';
 
 const styles = makeStyles((theme) => ({
 	container: {
+	},
+	explainerTextContainer: {
+		textAlign: "horizontal",
+		margin: theme.spacing(2)
+	},
+	bookGameContainer: {
+		margin: theme.spacing(2)
 	},
 	bookImage: {
 		width: "200px",
@@ -27,13 +35,13 @@ const styles = makeStyles((theme) => ({
 function SelectGamePage(props) {
 	const s = styles();
 	const { games } = props;
-	
+
 	const quizGroups = chunk(games, 2);
 
 	const buildBookGameSelection = (singleGame, gameIndex) => {
 		const { books } = singleGame;
 		return (
-			<div key={gameIndex}>
+			<div key={gameIndex} className={s.bookGameContainer}>
 				<div>
 					{books.slice(0, 2).map((d, i) => {
 						return (<span key={i}>
@@ -55,7 +63,9 @@ function SelectGamePage(props) {
 
 
 	return (<Container maxWidth="lg" className={s.container}>
-		<div>Choose a quiz to start. Every question in the quiz will be based on the four books shown. Try to pick a grouping of books you know something about!</div>
+		<div className={s.explainerTextContainer}> <Typography variant="h4" gutterBottom component="div">
+			Choose a quiz to start. Every question in the quiz will be based on the four books shown. Pick a group of books you know something about!
+		</Typography></div>
 		{quizGroups.map((groupItems, groupIndex) => {
 			return (<div key={groupIndex} className={s.twoQuizRow}>
 				{groupItems.map((d, groupItemIndex) => {

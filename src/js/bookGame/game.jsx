@@ -52,10 +52,13 @@ const styles = makeStyles((theme) => ({
 	gameOverShowQuestionsButton: {
 		marginRight: theme.spacing(2)
 	},
-	buttomAnotherGameButton: { width: "100%" },
 	arrowsContainer: {
 		display: "flex",
 		justifyContent: "center"
+	},
+	anotherQuizBottomContainer: {
+		textAlign: "center",
+		margin: theme.spacing(2)
 	},
 	hide: { visibility: "hidden" }
 }));
@@ -140,32 +143,34 @@ function Game(props) {
 			</div>)}
 			{gameOver && (<div className={s.content}>
 				<div className={s.gameOverContainer}>
-				<div className={s.cardContainer}>
-					<Card variant="outlined" className={s.cardOverride}>
-						<div className={s.gameOverTextContainer}>
-							<div className={s.gameOverText}>Game over!</div>
-							<div className={s.numCorrectText}>You got {numCorrect} of {numQuestions} correct.</div>
-							<div className={s.gameOverButtonsContainer}>
-								<Button variant="outlined"
-									className={s.gameOverShowQuestionsButton}
-									onClick={() => setShowQuestions(true)}>Show Questions</Button>
-								<Link to="/">Select another quiz</Link>
+					<div className={s.cardContainer}>
+						<Card variant="outlined" className={s.cardOverride}>
+							<div className={s.gameOverTextContainer}>
+								<div className={s.gameOverText}>Game over!</div>
+								<div className={s.numCorrectText}>You got {numCorrect} of {numQuestions} correct.</div>
+								<div className={s.gameOverButtonsContainer}>
+									<Button variant="outlined"
+										className={s.gameOverShowQuestionsButton}
+										onClick={() => setShowQuestions(true)}>Show Questions</Button>
+									<Link to="/">Select another quiz</Link>
+								</div>
 							</div>
-						</div>
-					</Card>
-				</div>
+						</Card>
+					</div>
 				</div>
 				<div className={showQuestions ? '' : s.hide}>
-				{gameData.questions.map((d, i) => {
-					return (<QuestionSvg
-						key={i + 100}
-						data={d}
-						questionAnswered={questionAnswered}
-						providedAnswer={answers[i]}
-					/>)
-				}
-				)}
-				<Button className={s.buttomAnotherGameButton} variant="outlined">Another Game</Button>
+					{gameData.questions.map((d, i) => {
+						return (<QuestionSvg
+							key={i + 100}
+							data={d}
+							questionAnswered={questionAnswered}
+							providedAnswer={answers[i]}
+						/>)
+					}
+					)}
+					<div className={s.anotherQuizBottomContainer}>
+						<Link to="/">Select another quiz</Link>
+					</div>
 				</div>
 
 			</div>)}
