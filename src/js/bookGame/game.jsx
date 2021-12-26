@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import useStateRef from './useStateRefHook.js';
 import QuestionSvg from './components/QuestionSvg.jsx';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { includes } from 'lodash';
 
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForward from '@material-ui/icons/ArrowForward';
@@ -70,8 +72,8 @@ function Game(props) {
 	const params = useParams();
 	const { games } = props;
 	const gameData = games[params.gameIndex];
-	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-	const [answeredUntil, setAnsweredUntil] = useState(0);
+	const [currentQuestionIndex, setCurrentQuestionIndex, currentQuestionIndexRef] = useStateRef(0);
+	const [answeredUntil, setAnsweredUntil, answeredUntilRef] = useStateRef(0);
 	const [numCorrect, setNumCorrect] = React.useState(0);
 	const [gameOver, setGameOver] = React.useState(false);
 	const [answers, setAnswers] = React.useState({});
@@ -81,7 +83,7 @@ function Game(props) {
 
 
 	const questionAnswered = (wasCorrect, answer) => {
-		setAnsweredUntil(currentQuestionIndex + 1);
+		setAnsweredUntil(currentQuestionIndexRef.current + 1);
 
 		if (wasCorrect) {
 			setNumCorrect(numCorrect + 1);
@@ -95,9 +97,8 @@ function Game(props) {
 
 
 	const nextQuestion = () => {
-
 		// handle if on final question here
-		const nextQuestionIndex = currentQuestionIndex + 1;
+		const nextQuestionIndex = currentQuestionIndexRef.current + 1;
 		if (nextQuestionIndex == numQuestions) {
 			setGameOver(true);
 		} else {
@@ -107,10 +108,32 @@ function Game(props) {
 	};
 
 	const prevQuestion = () => {
-		const prevQuestionIndex = currentQuestionIndex - 1;
+		const prevQuestionIndex = currentQuestionIndexRef.current - 1;
 
 		setCurrentQuestionIndex(prevQuestionIndex);
 	};
+
+	const onFirstQuestionRef = () => currentQuestionIndexRef.current === 0;
+	const onFirstQuestion = currentQuestionIndex === 0;
+	const answeredCurrentQuestionRef = () => answeredUntilRef.current > currentQuestionIndexRef.current;
+	const answeredCurrentQuestion = answeredUntil > currentQuestionIndex;
+
+	const handleKeyDownEvent = ({ keyCode }) => {
+		if (includes([39, 13], keyCode) && answeredCurrentQuestionRef()) {
+			nextQuestion();
+		} else if (keyCode === 37 && !onFirstQuestionRef()) {
+			// go back a question
+			prevQuestion();
+		}
+	};
+
+	useEffect(() => {
+		window.addEventListener("keydown", handleKeyDownEvent)
+
+		return () => {
+			window.removeEventListener("keydown", handleKeyDownEvent);
+		}
+	}, []);
 
 
 	return (
@@ -125,14 +148,14 @@ function Game(props) {
 				/>
 				<div className={s.arrowsContainer}>
 					<div>
-						<span className={currentQuestionIndex != 0 ? '' : s.hide}>
+						<span className={!onFirstQuestion ? '' : s.hide}>
 							<IconButton aria-label="back"
 								onClick={prevQuestion}>
 								<ArrowBack />
 							</IconButton>
 						</span>
 						<Typography display="inline">{currentQuestionIndex + 1} of {numQuestions}</Typography>
-						<span className={answeredUntil != currentQuestionIndex ? '' : s.hide}>
+						<span className={answeredCurrentQuestion ? '' : s.hide}>
 							<IconButton aria-label="next"
 								onClick={nextQuestion}>
 								<ArrowForward />
