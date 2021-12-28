@@ -56,7 +56,8 @@ const styles = makeStyles((theme) => ({
 	},
 	arrowsContainer: {
 		display: "flex",
-		justifyContent: "center"
+		justifyContent: "center",
+		marginTop: "-16px"
 	},
 	anotherQuizBottomContainer: {
 		textAlign: "center",

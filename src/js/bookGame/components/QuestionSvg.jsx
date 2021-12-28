@@ -13,7 +13,7 @@ const height = 300;
 
 const styles = makeStyles(() => ({
 	outerSvgContainer: {
-		border: "1px solid black"
+		maxHeight: "450px"
 	}
 }));
 

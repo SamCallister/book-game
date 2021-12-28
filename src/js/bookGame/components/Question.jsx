@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     '&.MuiButtonBase-root': {
       background: 'none'
     },
-    backgroundColor: 'rgba(0, 204, 0, .4)'
+    backgroundColor: 'rgba(0, 204, 0, .5)'
   },
   wrongAnswer: {
     '&.Mui-checked': {
@@ -34,9 +34,11 @@ const useStyles = makeStyles((theme) => ({
     '&.MuiButtonBase-root': {
       background: 'none'
     },
-    backgroundColor: 'rgba(225, 102, 102, .4)'
+    backgroundColor: 'rgba(225, 102, 102, .5)'
   },
-  regularChoice: {}
+  regularChoice: {
+    marginBottom: "2px"
+  }
 }));
 
 
@@ -60,9 +62,9 @@ export default function Question(props) {
 
   const getClassBasedOnAnswer = (questionId, correctAnswer, selectedChoice) => {
     if (questionId == selectedChoice) {
-      return correctAnswer == questionId ? s.correctAnswer : s.wrongAnswer;
+      return `${s.regularChoice} ${correctAnswer == questionId ? s.correctAnswer : s.wrongAnswer}`;
     } else if (selectedChoice.length && questionId == correctAnswer) {
-      return s.correctAnswer;
+      return `${s.regularChoice} ${s.correctAnswer}`;
     } else {
       return s.regularChoice;
     }
@@ -74,7 +76,7 @@ export default function Question(props) {
       <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
         {data.answers.map((q) => {
           const chosenClass = getClassBasedOnAnswer(q.id, data.correct_answer.id, value);
-          
+
           return (<FormControlLabel
             className={chosenClass}
             key={q.id}

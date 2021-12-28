@@ -30,6 +30,7 @@ function draw(svg, questionData, width, height) {
 				return { text: word, size: 10 + ((freq / highestCount) * 50) }
 			}))
 		.padding(5)
+		.rotate(() => (~~(Math.random() * 6) - 3) * 20)
 		.fontSize(function (d) { return d.size; });
 
 	layout.on("end", addWords.bind(this, svg, layout));
@@ -37,6 +38,7 @@ function draw(svg, questionData, width, height) {
 
 	layout.start();
 }
+
 
 function drawPlain(svg, questionData, width, height) {
 
