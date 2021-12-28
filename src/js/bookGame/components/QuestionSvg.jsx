@@ -25,7 +25,7 @@ function QuestionSvg(props) {
 	const drawSvg = () => {
 		const questionType = data.meta.type;
 		const questionDisplay = data.meta.display;
-		
+
 		if (questionDisplay == 'cloud' || questionType == 'tf-idf') {
 			wordCloud.draw(
 				d3.select(d3Container.current),
@@ -34,12 +34,22 @@ function QuestionSvg(props) {
 				height
 			);
 		}
-		else if (questionType == 'sent-length') {
+		else if (questionType == 'longest-median-sent-length') {
 			kde.draw(
 				d3.select(d3Container.current),
 				data,
 				width,
-				height
+				height,
+				"Longest Median Sentence Length Book"
+			);
+		}
+		else if (questionType == 'shortest-median-sent-length') {
+			kde.draw(
+				d3.select(d3Container.current),
+				data,
+				width,
+				height,
+				"Shortest Median Sentence Length Book"
 			);
 		}
 		else if (questionDisplay == 'bar' || questionType == 'unique-most-common') {
@@ -63,10 +73,10 @@ function QuestionSvg(props) {
 				d3.select(d3Container.current),
 				data,
 				width,
-				height 
+				height
 			)
 		}
-		
+
 	}
 
 	useEffect(() => {

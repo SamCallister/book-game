@@ -87,32 +87,27 @@ def word_length_question(q):
                           answer_points=unique_and_score_kde(kde_answer, answer_word_lengh)))
 
 
-def sentence_length_question(q):
+def sentence_length_question(q, min_or_max):
     books = [load_and_strip(id) for id in q["answers"]]
-
     book_sent_lengths = [
-        get_sentence_lengths_num_words(text) for text in books]
-    # get max sentence length
-    max_sent_length = max([l for sent_lengths in book_sent_lengths
-                           for l in sent_lengths])
+        get_sentence_lengths_num_words(text) for text in books
+    ]
 
-    probability_vecs = np.array([get_probability_vec(lengths, max_sent_length)
-                                 for lengths in book_sent_lengths])
+    book_median_sent_lengths = [
+        np.median(lengths)
+        for lengths in book_sent_lengths
+    ]
 
-    avg_prob_vec = probability_vecs.mean(axis=0)
-
-    index_of_most_different = np.argmax([
-        distance.jensenshannon(v, avg_prob_vec)
-        for v in probability_vecs
-    ])
+    answer_choosing_function = np.argmin if min_or_max == 'min' else np.argmax
+    answer_index = answer_choosing_function(book_median_sent_lengths)
 
     # get kde estimates
     other_sent_length = trim_sent_len_outliers(
-        np.array(sorted([s for i, sents in enumerate(book_sent_lengths) if i != index_of_most_different
+        np.array(sorted([s for i, sents in enumerate(book_sent_lengths) if i != answer_index
                          for s in sents]))
     )
     answer_sent_length = trim_sent_len_outliers(
-        np.array(sorted(book_sent_lengths[index_of_most_different]))
+        np.array(sorted(book_sent_lengths[answer_index]))
     )
 
     kde_others = KernelDensity(bandwidth=kernel_bandwidth, kernel='gaussian')
@@ -121,7 +116,7 @@ def sentence_length_question(q):
     kde_answer = KernelDensity(bandwidth=kernel_bandwidth, kernel='gaussian')
     kde_answer.fit(answer_sent_length.reshape(len(answer_sent_length), 1))
 
-    return dict(correct_answer=q["answers"][index_of_most_different],
+    return dict(correct_answer=q["answers"][answer_index],
                 data=dict(other_points=unique_and_score_kde(kde_others, other_sent_length),
                           answer_points=unique_and_score_kde(kde_answer, answer_sent_length)))
 
@@ -256,8 +251,10 @@ def process_question(q):
         return {**q, **dict(data=question_res["data"]), **dict(correct_answer=q.get("correct_answer", question_res.get("correct_answer")))}
     elif q["meta"]["type"] == "tf-idf":
         return {**q, **dict(data=get_tf_idf_question(q))}
-    elif q["meta"]["type"] == "sent-length":
-        return {**q, **sentence_length_question(q)}
+    elif q["meta"]["type"] == "longest-median-sent-length":
+        return {**q, **sentence_length_question(q, "max")}
+    elif q["meta"]["type"] == "shortest-median-sent-length":
+        return {**q, **sentence_length_question(q, "min")}
     elif q["meta"]["type"] == "word-length":
         return {**q, **word_length_question(q)}
     elif q["meta"]["type"] == "unique-most-common":
@@ -296,12 +293,12 @@ def build_game(path_to_game_json):
 
 
 def main():
-    games = [build_game('book_data/game_1.json'), build_game('book_data/game_2.json')]
+    games = [build_game('book_data/game_1.json'),
+             build_game('book_data/game_2.json')]
 
     output_path = Path.cwd().parent.parent / 'public' / 'data'
     output_path.mkdir(parents=True, exist_ok=True)
     (output_path / 'games.json').write_text(json.dumps(games))
-    
 
 
 if __name__ == "__main__":

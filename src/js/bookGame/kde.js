@@ -6,7 +6,7 @@ import svgUtil from './svgUtil';
 const animationDuration = 2000;
 
 
-function draw(svg, questionData, width, height) {
+function draw(svg, questionData, width, height, correctAnswerLineLabel) {
 	const otherPoints = questionData.data.other_points;
 	const answerPoints = questionData.data.answer_points;
 
@@ -83,7 +83,7 @@ function draw(svg, questionData, width, height) {
 		.attr("transform", `translate(${x.range()[1] - 50},${y.range()[1] + 10})`);
 
 	const enteredLegendGroup = legendGroup.selectAll("g")
-		.data(["Other Three Books", "Most Different Book"])
+		.data(["Other Three Books", correctAnswerLineLabel])
 		.enter();
 
 	enteredLegendGroup.append("text")

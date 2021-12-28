@@ -1,93 +1,105 @@
 {
-	"books": [{
-		"title": "Hamlet, Prince of Denmark",
-		"author": "William Shakespeare",
-        "img":"hamlet.jpg",
-		"id": 1524
-	},{
-		"title": "A Christmas Carol in Prose; Being a Ghost Story of Christmas",
-		"author": "Charles Dickens",
-        "img":"christmas_carol.jpg",
-		"id": 46
-	},{
-		"title": "Pride and Prejudice",
-		"author": "Jane Austen",
-        "img":"pride_and_prejudice.jpg",
-		"id": 1342
-	},{
-		"title": "In our time",
-		"author": "Ernest Hemingway",
-        "img":"in_our_time.jpg",
-		"id": 61085
-	}],
-	"questions": [
-    {
-        "text": "These adjectives are commonly found in which book?",
-        "meta": {
-            "type": "pos-question",
-            "sub_type": "adj",
-            "num_words": 20,
-            "display": "cloud"
+    "books": [
+        {
+            "title": "Hamlet, Prince of Denmark",
+            "author": "William Shakespeare",
+            "img": "hamlet.jpg",
+            "id": 1524
         },
-        "correct_answer": 1524
-    },
-    {
-        "text": "These verbs are commonly found in which book?",
-        "meta": {
-            "type": "pos-question",
-            "sub_type": "verb",
-            "num_words": 10,
-            "display": "bar"
+        {
+            "title": "A Christmas Carol in Prose; Being a Ghost Story of Christmas",
+            "author": "Charles Dickens",
+            "img": "christmas_carol.jpg",
+            "id": 46
         },
-        "correct_answer": 61085
-    },
-    {
-        "text": "These words are best associated with which book?",
-        "meta": {
-            "type": "tf-idf",
-            "display": "cloud",
-            "num_words": 20
+        {
+            "title": "Pride and Prejudice",
+            "author": "Jane Austen",
+            "img": "pride_and_prejudice.jpg",
+            "id": 1342
         },
-        "correct_answer": 1342
-    },
-    {
-        "text": "Which book has the most different sentence length distribution compared to the other 3 books?",
-        "meta": {
-            "type": "sent-length"
+        {
+            "title": "In our time",
+            "author": "Ernest Hemingway",
+            "img": "in_our_time.jpg",
+            "id": 61085
         }
-    },
-    {
-        "text": "These words are unique to which book?",
-        "meta": {
-            "type": "unique-most-common",
-            "num_words": 10
+    ],
+    "questions": [
+        {
+            "text": "These adjectives are commonly found in which book?",
+            "meta": {
+                "type": "pos-question",
+                "sub_type": "adj",
+                "num_words": 20,
+                "display": "cloud"
+            },
+            "correct_answer": 1524
         },
-        "correct_answer": 46
-    },
-    {
-        "text": "These long words are unique to which book?",
-        "meta": {
-            "type": "unique-longest",
-            "num_words": 20
+        {
+            "text": "These verbs are commonly found in which book?",
+            "meta": {
+                "type": "pos-question",
+                "sub_type": "verb",
+                "num_words": 10,
+                "display": "bar"
+            },
+            "correct_answer": 61085
         },
-        "correct_answer": 1524
-    },
-    {
-        "text": "These nouns are commonly found in which book?",
-        "meta": {
-            "type": "pos-question",
-            "sub_type": "noun",
-            "num_words": 10,
-            "display": "bar"
+        {
+            "text": "These words are best associated with which book?",
+            "meta": {
+                "type": "tf-idf",
+                "display": "cloud",
+                "num_words": 20
+            },
+            "correct_answer": 1342
         },
-        "correct_answer": 61085
-    },
-    {
-        "text": "Which book has the highest noun to verb ratio?",
-        "meta": {
-            "type": "pos-question",
-            "sub_type": "noun-to-verb",
-            "display": "number-ratio"
+        {
+            "text": "Which book has the longest median sentence length?",
+            "meta": {
+                "type": "longest-median-sent-length"
+            }
+        },
+        {
+            "text": "Which book has the shortest median sentence length?",
+            "meta": {
+                "type": "shortest-median-sent-length"
+            }
+        },
+        {
+            "text": "These words are unique to which book?",
+            "meta": {
+                "type": "unique-most-common",
+                "num_words": 10
+            },
+            "correct_answer": 46
+        },
+        {
+            "text": "These long words are unique to which book?",
+            "meta": {
+                "type": "unique-longest",
+                "num_words": 20
+            },
+            "correct_answer": 1524
+        },
+        {
+            "text": "These nouns are commonly found in which book?",
+            "meta": {
+                "type": "pos-question",
+                "sub_type": "noun",
+                "num_words": 10,
+                "display": "bar"
+            },
+            "correct_answer": 61085
+        },
+        {
+            "text": "Which book has the highest noun to verb ratio?",
+            "meta": {
+                "type": "pos-question",
+                "sub_type": "noun-to-verb",
+                "display": "number-ratio"
+            }
         }
-    }]
-	}
+    ]
+}

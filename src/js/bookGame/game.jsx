@@ -76,6 +76,7 @@ function Game(props) {
 	const params = useParams();
 	const { games } = props;
 	const gameData = games[params.gameIndex];
+	console.log(gameData)
 	const [currentQuestionIndex, setCurrentQuestionIndex, currentQuestionIndexRef] = useStateRef(0);
 	const [answeredUntil, setAnsweredUntil, answeredUntilRef] = useStateRef(0);
 	const [numCorrect, setNumCorrect] = React.useState(0);
