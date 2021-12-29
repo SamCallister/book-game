@@ -4,6 +4,8 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Typography from '@material-ui/core/Typography';
+import Check from '@material-ui/icons/Check';
+import Clear from '@material-ui/icons/Clear';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +39,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'rgba(225, 102, 102, .5)'
   },
   regularChoice: {
-    marginBottom: "2px"
+    marginBottom: "2px",
+    position: "relative"
+  },
+  iconPos: {
+    position: 'absolute',
+    right: '-28px'
   }
 }));
 
@@ -59,15 +66,33 @@ export default function Question(props) {
     questionAnswered(answerId == data.correct_answer.id, answerId)
   };
 
-
-  const getClassBasedOnAnswer = (questionId, correctAnswer, selectedChoice) => {
+  const getChoiceStatus = (questionId, correctAnswer, selectedChoice) => {
     if (questionId == selectedChoice) {
-      return `${s.regularChoice} ${correctAnswer == questionId ? s.correctAnswer : s.wrongAnswer}`;
-    } else if (selectedChoice.length && questionId == correctAnswer) {
-      return `${s.regularChoice} ${s.correctAnswer}`;
+      return correctAnswer == questionId ? 'correct' : 'wrong';
+    } else if (selectedChoice.length && questionId == correctAnswer) { // show correct answer when a choice is selected
+      return 'correctNotChosen';
     } else {
-      return s.regularChoice;
+      return 'regular';
     }
+  }
+
+
+  const getClassBasedOnAnswer = (choiceStatus) => {
+    return {
+      correct: `${s.regularChoice} ${s.correctAnswer}`,
+      correctNotChosen: `${s.regularChoice} ${s.correctAnswer}`,
+      wrong: `${s.regularChoice} ${s.wrongAnswer}`,
+      regular: s.regularChoice
+    }[choiceStatus];
+  }
+
+  const buildLabel = (title, choiceStatus) => {
+    const icon = {
+      correct: <Check classes={{ root: s.iconPos }}></Check>,
+      wrong: <Clear classes={{ root: s.iconPos }}></Clear>
+    }[choiceStatus];
+
+    return (<span>{title} {icon}</span>)
   }
 
   return (
@@ -75,14 +100,15 @@ export default function Question(props) {
       <div className={s.questionText}><Typography>{data.text}</Typography></div>
       <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
         {data.answers.map((q) => {
-          const chosenClass = getClassBasedOnAnswer(q.id, data.correct_answer.id, value);
+          const choiceStatus = getChoiceStatus(q.id, data.correct_answer.id, value);
+          const chosenClass = getClassBasedOnAnswer(choiceStatus);
 
           return (<FormControlLabel
             className={chosenClass}
             key={q.id}
             value={`${q.id}`}
             control={<Radio classes={{ root: chosenClass }} />}
-            label={q.title} />)
+            label={buildLabel(q.title, choiceStatus)} />)
         })}
       </RadioGroup>
 

@@ -92,14 +92,6 @@
                 "display": "bar"
             },
             "correct_answer": 61085
-        },
-        {
-            "text": "Which book has the highest noun to verb ratio?",
-            "meta": {
-                "type": "pos-question",
-                "sub_type": "noun-to-verb",
-                "display": "number-ratio"
-            }
         }
     ]
 }

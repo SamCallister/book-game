@@ -135,8 +135,6 @@ def pos_quesiton(q):
         nouns = [x[0] for x in get_tagged_words_for_book(q["correct_answer"])
                  if x[1] in {"NN", "NNS", "NNP", "NNPS"}]
         return dict(data=nltk.FreqDist(nouns).most_common(q["meta"]["num_words"]))
-    elif q["meta"]["sub_type"] == "noun-to-verb":
-        return noun_to_verb_ratio_question(q)
 
     raise Exception(
         f"Question subtype {q['meta']['sub_type']} for meta {q['meta']} not supported")
@@ -228,21 +226,6 @@ def get_nouns(tagged_words):
 
 def get_verbs(tagged_words):
     return [x[0] for x in tagged_words if x[1] in {"VB", "VBD", "VBP"}]
-
-
-def noun_to_verb_ratio_question(q):
-    tagged_by_book = [get_tagged_words_for_book(
-        book_id) for book_id in q["answers"]]
-
-    counts = [dict(noun_count=len(get_nouns(w)),
-                   verb_count=len(get_verbs(w))) for w in tagged_by_book]
-
-    noun_to_verb = [d["noun_count"] / d["verb_count"] for d in counts]
-
-    correct_index = np.argmax(noun_to_verb)
-
-    return dict(correct_answer=q["answers"][correct_index],
-                data=sorted(noun_to_verb, reverse=True))
 
 
 def process_question(q):

@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import wordCloud from './../wordCloud.js';
 import kde from './../kde.js';
-import numberRatios from './../numberRatios.js';
 import horizontalBar from './../horizontalBar.js';
 import Question from './Question.jsx';
 import * as d3 from 'd3';
@@ -67,14 +66,6 @@ function QuestionSvg(props) {
 				width,
 				height
 			);
-		}
-		else if (questionDisplay == 'number-ratio') {
-			numberRatios.draw(
-				d3.select(d3Container.current),
-				data,
-				width,
-				height
-			)
 		}
 
 	}
