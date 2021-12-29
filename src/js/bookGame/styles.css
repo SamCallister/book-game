@@ -1,9 +1,9 @@
 .xaxis {
-	font-size: 0.7em;
+	font-size: 0.9em;
 }
 
 .yaxis {
-	font-size: 0.7em;
+	font-size: 0.9em;
 }
 
 .kde-line {
@@ -23,7 +23,7 @@
 }
 
 .legend-group {
-	font-size: 0.6em;
+	font-size: 0.8em;
 	stroke-width: 2;
 }
 

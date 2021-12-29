@@ -40,7 +40,7 @@ function QuestionSvg(props) {
 				data,
 				width,
 				height,
-				"Longest Median Sentence Length Book"
+				"book with longest median sentence"
 			);
 		}
 		else if (questionType == 'shortest-median-sent-length') {
@@ -49,7 +49,7 @@ function QuestionSvg(props) {
 				data,
 				width,
 				height,
-				"Shortest Median Sentence Length Book"
+				"book with shortest median sentence"
 			);
 		}
 		else if (questionDisplay == 'bar' || questionType == 'unique-most-common') {

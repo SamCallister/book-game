@@ -29,8 +29,7 @@ const styles = makeStyles((theme) => ({
 		justifyContent: "center"
 	},
 	content: {
-		flexGrow: 0.4,
-		maxWidth: "65%"
+		flexGrow: 0.2
 	},
 	gameOverContainer: {
 		display: "flex",

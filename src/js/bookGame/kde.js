@@ -41,7 +41,7 @@ function draw(svg, questionData, width, height, correctAnswerLineLabel) {
 		svg,
 		"yaxis",
 		`translate(${svgUtil.margin.left},0)`,
-		d3.axisLeft(y).tickFormat(d3.format("0.1%")).ticks(5),
+		d3.axisLeft(y).tickFormat(d3.format("0.0%")).ticks(5),
 		svgUtil.addYAxisLabel.bind(this, svg, "Percentage of Sentences", svgUtil.margin, height)
 	);
 
@@ -80,10 +80,10 @@ function draw(svg, questionData, width, height, correctAnswerLineLabel) {
 	svg.selectAll('.legend-group').remove();
 	const legendGroup = svg.append('g')
 		.attr("class", 'legend-group')
-		.attr("transform", `translate(${x.range()[1] - 50},${y.range()[1] + 10})`);
+		.attr("transform", `translate(${x.range()[1] - 85},${y.range()[1] + 10})`);
 
 	const enteredLegendGroup = legendGroup.selectAll("g")
-		.data(["Other Three Books", correctAnswerLineLabel])
+		.data(["other three books", correctAnswerLineLabel])
 		.enter();
 
 	enteredLegendGroup.append("text")
@@ -94,8 +94,8 @@ function draw(svg, questionData, width, height, correctAnswerLineLabel) {
 	enteredLegendGroup.append("line")
 		.attr("x1", -10)
 		.attr("x2", -2)
-		.attr("y1", (_, i) => (i * 15) - 4)
-		.attr("y2", (_, i) => (i * 15) - 4)
+		.attr("y1", (_, i) => (i * 14) - 3)
+		.attr("y2", (_, i) => (i * 14) - 3)
 		.attr("stroke", (_, i) => d3.schemeCategory10[i]);
 }
 
