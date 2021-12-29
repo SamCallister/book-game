@@ -2,8 +2,6 @@ import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
 from collections import Counter
-from functools import reduce
-from scipy.spatial import distance
 import numpy as np
 from sklearn.neighbors import KernelDensity
 from pathlib import Path
@@ -19,7 +17,7 @@ outlier_quantile = 0.98
 
 basic_stopwords_set = set(stopwords.words('english'))
 punctuation_set = set(string.punctuation).union(
-    {'”', '’', '``', '“', "''", "n't", "--", "'ll"})
+    {'”', '’', '``', '“', "''", "n't", "--", "'ll", "'s", "'re", "'em", "'d", "'m"})
 custom_stop_words = {'mr.', 'miss', 'mrs.', 'said', 'mr', 'mrs', 'th'}
 all_stop_words = basic_stopwords_set.union(
     punctuation_set).union(custom_stop_words)
