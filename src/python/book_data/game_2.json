@@ -27,20 +27,18 @@
     ],
     "questions": [
         {
-            "text": "These adjectives are commonly found in which book?",
+            "text": "These adjectives are most to which book?",
             "meta": {
-                "type": "pos-question",
-                "sub_type": "adj",
+                "type": "unique-adj",
                 "num_words": 20,
                 "display": "cloud"
             },
             "correct_answer": 2852
         },
         {
-            "text": "These verbs are commonly found in which book?",
+            "text": "These verbs are unique to which book?",
             "meta": {
-                "type": "pos-question",
-                "sub_type": "verb",
+                "type": "unique-verb",
                 "num_words": 10,
                 "display": "bar"
             },
@@ -68,6 +66,15 @@
             }
         },
         {
+            "text": "These verbs are unique to which book?",
+            "meta": {
+                "type": "unique-verb",
+                "num_words": 12,
+                "display": "bar"
+            },
+            "correct_answer": 2852
+        },
+        {
             "text": "These words are unique to which book?",
             "meta": {
                 "type": "unique-most-common",
@@ -82,6 +89,16 @@
                 "num_words": 20
             },
             "correct_answer": 84
+        },
+        {
+            "text": "These adjectives are unique to which book?",
+            "meta": {
+                "type": "unique-adj",
+                "sub_type": "adj",
+                "num_words": 12,
+                "display": "bar"
+            },
+            "correct_answer": 140
         },
         {
             "text": "These nouns are commonly found in which book?",

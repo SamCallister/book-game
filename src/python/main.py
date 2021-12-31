@@ -18,7 +18,19 @@ outlier_quantile = 0.98
 basic_stopwords_set = set(stopwords.words('english'))
 punctuation_set = set(string.punctuation).union(
     {'”', '’', '``', '“', "''", "n't", "--", "'ll", "'s", "'re", "'em", "'d", "'m"})
-custom_stop_words = {'mr.', 'miss', 'mrs.', 'said', 'mr', 'mrs', 'th'}
+custom_stop_words = {'mr.', 'miss', 'mrs.', 'said',
+                     'mr', 'mrs', 'th', 'chapter', 'l.', 'well.', '—the', '—'}
+
+custom_non_adj = {'guildenstern', 'grimpen', 'jurgis', 'ii', 'e', 'osric',
+                  'iii', 'iv', 'polonius', 'unto', 'hath', 'doth', 'forc', 'rous', 'stay', 'ahab',
+                  'starbuck', 'moby', 'stubb', 'queequeg', 'mortimer', 'sherlock', 'ye', 'nigh', 'fast-fish',
+                  'whale', 'sperm', 'loose-fish', 'astern', 'not.', 'northumberland', 'ona', 'packingtown',
+                  'twenty-five', 'teta', 'marija', 'saturday', 'mast-head', 'baskerville', 'hundred-dollar'}
+custom_non_verb = {'sir', 'jurgis', 'ahab', 'queequeg', 'leeward',
+                   'stubb', 'play._', 'polonius', 'en', 'doth', 'laertes', 'hamlet', 'starbuck',
+                   'pearl', 'hester', 'baskerville', 'dr', 'holmes', 'stapleton', 'coombe', 'devonshire',
+                   'did.', 'think.', 'watson', 'dr.', 'baker'}
+custom_non_noun = {'ye', 'nigh', 'thou'}
 all_stop_words = basic_stopwords_set.union(
     punctuation_set).union(custom_stop_words)
 
@@ -119,28 +131,50 @@ def sentence_length_question(q, min_or_max):
                           answer_points=unique_and_score_kde(kde_answer, answer_sent_length)))
 
 
-# get data for questions
+def get_adj_from_book(book_id):
+    return [word for word, tag in get_tagged_words_for_book(book_id)
+            if tag == "ADJ" and word not in custom_non_adj]
+
+
+def get_verb_from_book(book_id):
+    return [word for word, tag in get_tagged_words_for_book(book_id)
+            if tag == "VERB"
+            and word not in custom_non_verb]
+
+
+def words_best_associated_with_book_question(words_per_book, q):
+    string_book_words = [' '.join(words) for words in words_per_book]
+    chosen_words = [x[0]
+                    for x in get_tf_idf_question(q, books=string_book_words)]
+
+    index_of_correct_answer = get_correct_answer_index(q)
+    freq_dist = nltk.FreqDist(words_per_book[index_of_correct_answer])
+
+    return dict(data=[(w, freq_dist.get(w)) for w in chosen_words])
+
+
 def pos_quesiton(q):
     if q["meta"]["sub_type"] == "adj":
-        adjectives = [x[0] for x in get_tagged_words_for_book(q["correct_answer"])
-                      if x[1] in {"JJ", "JJR", "JJS"}]
-        return dict(data=nltk.FreqDist(adjectives).most_common(q["meta"]["num_words"]))
+        book_adjectives = [get_adj_from_book(
+            book_id) for book_id in q["answers"]]
+        return words_best_associated_with_book_question(book_adjectives, q)
+
     elif q["meta"]["sub_type"] == "verb":
-        verbs = [x[0] for x in get_tagged_words_for_book(q["correct_answer"])
-                 if x[1] in {"VB", "VBD", "VBP"}]
-        return dict(data=nltk.FreqDist(verbs).most_common(q["meta"]["num_words"]))
+        book_verbs = [get_verb_from_book(book_id) for book_id in q["answers"]]
+        return words_best_associated_with_book_question(book_verbs, q)
+
     elif q["meta"]["sub_type"] == "noun":
         nouns = [x[0] for x in get_tagged_words_for_book(q["correct_answer"])
-                 if x[1] in {"NN", "NNS", "NNP", "NNPS"}]
+                 if x[1] == 'NOUN']
         return dict(data=nltk.FreqDist(nouns).most_common(q["meta"]["num_words"]))
 
     raise Exception(
         f"Question subtype {q['meta']['sub_type']} for meta {q['meta']} not supported")
 
 
-def get_tf_idf_question(q):
-    books = [load_and_strip(book_id)
-             for book_id in q["answers"]]
+def get_tf_idf_question(q, books=None):
+    books = books or [load_and_strip(book_id)
+                      for book_id in q["answers"]]
     vectorizer = TfidfVectorizer(stop_words=all_stop_words)
     X = vectorizer.fit_transform(books)
     df = pd.DataFrame(
@@ -148,7 +182,7 @@ def get_tf_idf_question(q):
         index=range(len(books)),
         columns=vectorizer.get_feature_names_out(X)
     )
-    index_of_correct_answer = q["answers"].index(q["correct_answer"])
+    index_of_correct_answer = get_correct_answer_index(q)
 
     return [
         (i, v)
@@ -179,9 +213,23 @@ def get_unique_words(words_per_book, correct_answer_index):
     return set(correct_words) - other_sets
 
 
-def get_unique_most_common(q):
-    words_per_book = get_words_per_book(q["answers"])
-    index_of_correct_answer = q["answers"].index(q["correct_answer"])
+def get_unique_verbs(q):
+    verbs_per_book = [get_verb_from_book(book_id) for book_id in q["answers"]]
+    return get_unique_most_common(q, passed_words_per_book=verbs_per_book)
+
+
+def get_unique_adj(q):
+    adj_per_book = [get_adj_from_book(book_id) for book_id in q["answers"]]
+    return get_unique_most_common(q, passed_words_per_book=adj_per_book)
+
+
+def get_correct_answer_index(q):
+    return q["answers"].index(q["correct_answer"])
+
+
+def get_unique_most_common(q, passed_words_per_book=None):
+    words_per_book = passed_words_per_book or get_words_per_book(q["answers"])
+    index_of_correct_answer = get_correct_answer_index(q)
 
     unique_words = get_unique_words(words_per_book, index_of_correct_answer)
     correct_words = words_per_book[index_of_correct_answer]
@@ -191,7 +239,7 @@ def get_unique_most_common(q):
 
 def get_unique_longest(q):
     words_per_book = get_words_per_book(q["answers"])
-    index_of_correct_answer = q["answers"].index(q["correct_answer"])
+    index_of_correct_answer = get_correct_answer_index(q)
 
     unique_words = get_unique_words(words_per_book, index_of_correct_answer)
 
@@ -211,19 +259,20 @@ def get_tagged_words_for_book(book_id):
     sents = [nltk.word_tokenize(str.lower(s))
              for s in nltk.sent_tokenize(book)]
     tagged_sents = nltk.pos_tag_sents(sents)
-    tagged_words = [w for s in tagged_sents
-                    for w in s]
+    tagged_words = [(word, nltk.tag.map_tag('en-ptb', 'universal', tag)) for s in tagged_sents
+                    for word, tag in s]
 
     return [x for x in tagged_words
             if x[0] not in all_stop_words]
 
 
 def get_nouns(tagged_words):
-    return [x[0] for x in tagged_words if x[1] in {"NN", "NNS", "NNP", "NNPS"}]
+    return [word for word, tag in tagged_words if tag == 'NOUN'
+            and word not in custom_non_noun]
 
 
 def get_verbs(tagged_words):
-    return [x[0] for x in tagged_words if x[1] in {"VB", "VBD", "VBP"}]
+    return [x[0] for x in tagged_words if x[1] == 'VERB']
 
 
 def process_question(q):
@@ -240,6 +289,10 @@ def process_question(q):
         return {**q, **word_length_question(q)}
     elif q["meta"]["type"] == "unique-most-common":
         return {**q, **dict(data=get_unique_most_common(q))}
+    elif q["meta"]["type"] == "unique-verb":
+        return {**q, **dict(data=get_unique_verbs(q))}
+    elif q["meta"]["type"] == "unique-adj":
+        return {**q, **dict(data=get_unique_adj(q))}
     elif q["meta"]["type"] == "unique-longest":
         return {**q, **dict(data=get_unique_longest(q))}
 

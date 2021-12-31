@@ -27,21 +27,19 @@
     ],
     "questions": [
         {
-            "text": "These adjectives are commonly found in which book?",
+            "text": "These adjectives are unique to which book?",
             "meta": {
-                "type": "pos-question",
-                "sub_type": "adj",
+                "type": "unique-adj",
                 "num_words": 20,
                 "display": "cloud"
             },
             "correct_answer": 1524
         },
         {
-            "text": "These verbs are commonly found in which book?",
+            "text": "These verbs are unique to which book?",
             "meta": {
-                "type": "pos-question",
-                "sub_type": "verb",
-                "num_words": 10,
+                "type": "unique-verb",
+                "num_words": 15,
                 "display": "bar"
             },
             "correct_answer": 2701
@@ -56,6 +54,15 @@
             "correct_answer": 1342
         },
         {
+            "text": "These adjectives are unique to which book?",
+            "meta": {
+                "type": "unique-adj",
+                "num_words": 12,
+                "display": "bar"
+            },
+            "correct_answer": 2701
+        },
+        {
             "text": "Which book has the longest median sentence length?",
             "meta": {
                 "type": "longest-median-sent-length"
@@ -66,6 +73,14 @@
             "meta": {
                 "type": "shortest-median-sent-length"
             }
+        },
+        {
+            "text": "These long words are unique to which book?",
+            "meta": {
+                "type": "unique-longest",
+                "num_words": 20
+            },
+            "correct_answer": 46
         },
         {
             "text": "These words are unique to which book?",

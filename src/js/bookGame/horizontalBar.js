@@ -39,7 +39,7 @@ function draw(svg, questionData, width, height) {
 		svg,
 		"xaxis",
 		`translate(0,${height - svgUtil.margin.bottom})`,
-		d3.axisBottom(x),
+		d3.axisBottom(x).ticks(7),
 		svgUtil.addXAxisLabel.bind(this, svg, "Number of Occurences", svgUtil.margin, width, height)
 	);
 
