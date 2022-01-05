@@ -99,14 +99,12 @@
             "correct_answer": 1524
         },
         {
-            "text": "These nouns are commonly found in which book?",
+            "text": "These long words are unique to which book?",
             "meta": {
-                "type": "pos-question",
-                "sub_type": "noun",
-                "num_words": 10,
-                "display": "bar"
+                "type": "unique-longest",
+                "num_words": 20
             },
-            "correct_answer": 2701
+            "correct_answer": 1342
         }
     ]
 }
