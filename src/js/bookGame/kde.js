@@ -32,7 +32,7 @@ function draw(svg, questionData, width, height, correctAnswerLineLabel) {
 		svg,
 		"xaxis",
 		`translate(0,${height - svgUtil.margin.bottom})`,
-		d3.axisBottom(x),
+		d3.axisBottom(x).ticks(5),
 		svgUtil.addXAxisLabel.bind(this, svg, "Sentence Length", svgUtil.margin, width, height )
 	);
 
@@ -41,7 +41,7 @@ function draw(svg, questionData, width, height, correctAnswerLineLabel) {
 		svg,
 		"yaxis",
 		`translate(${svgUtil.margin.left},0)`,
-		d3.axisLeft(y).tickFormat(d3.format("0.0%")).ticks(5),
+		d3.axisLeft(y).tickFormat(d3.format("0.0%")).ticks(3),
 		svgUtil.addYAxisLabel.bind(this, svg, "Percentage of Sentences", svgUtil.margin, height)
 	);
 

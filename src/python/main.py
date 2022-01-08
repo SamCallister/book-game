@@ -19,18 +19,32 @@ basic_stopwords_set = set(stopwords.words('english'))
 punctuation_set = set(string.punctuation).union(
     {'”', '’', '``', '“', "''", "n't", "--", "'ll", "'s", "'re", "'em", "'d", "'m"})
 custom_stop_words = {'mr.', 'miss', 'mrs.', 'said',
-                     'mr', 'mrs', 'th', 'chapter', 'l.', 'well.', '—the', '—'}
+                     'mr', 'mrs', 'th', 'chapter', 'l.', 'well.', '—the', '—', '....', 'de', 'niggers'}
 
-custom_non_adj = {'guildenstern', 'grimpen', 'jurgis', 'ii', 'e', 'osric',
+custom_non_adj = {'alarmed', 'guildenstern', 'grimpen', 'jurgis', 'ii', 'e', 'osric',
                   'iii', 'iv', 'polonius', 'unto', 'hath', 'doth', 'forc', 'rous', 'stay', 'ahab',
                   'starbuck', 'moby', 'stubb', 'queequeg', 'mortimer', 'sherlock', 'ye', 'nigh', 'fast-fish',
                   'whale', 'sperm', 'loose-fish', 'astern', 'not.', 'northumberland', 'ona', 'packingtown',
-                  'twenty-five', 'teta', 'marija', 'saturday', 'mast-head', 'baskerville', 'hundred-dollar'}
+                  'twenty-five', 'teta', 'marija', 'saturday', 'mast-head', 'baskerville', 'hundred-dollar', 'tree',
+                  'marlow', 'kurtz', 'six-inch', 'diary', 'to-night', 'to-day', 'dr.', 'madam', 'quincey',
+                  'to-morrow', 'van', 'dublin', 'kathleen', 'next-door', 'frank',
+                  'lenehan', 'ivy', 'admiral', 'dr.', 'bible', 'chest', 'flint',
+                  'ben', 'israel', 'yo-ho-ho', 'livesey', 'n', 'captain', '_jonathan', 'lucy', 'london', 'baggot', 'freddy', 'gabriel', 'constable', 'grafton', 'dooty', 'tavern', 'thimble', 'forecastle', 'ship', 'cap',
+                  'agonised', '_hail', 'music-hall', 'e.', 'spy-glass', 'sparred', 'grown', 'attendants._', 'hamlet._', 'soldier', 'good-bye', 'oxford',
+                  '_times_', 'absent-minded', 'selden', 'tommy', 'antanas', 'unfold', 'hid', 'right.', 'curly-haired', 'aniele', 'polish', "lucy's", 'whilst', 'working-man', 'cheese', 'round-shot', 'madness', 'lean-jawed', 'supra-orbital', 'arrive', 'black-bearded', 'gatsby',
+                  'daisy', 'jordan', 'myrtle', 'nick', '...', 'ga-od', 'neighbour',
+                  'prep', 'wilson', 'jay', 'insisted', 'return', 'finger-tips', '…', 'hampstead', 'aunt', 'enter', 'underwear', 'fitzpatrick'}
 custom_non_verb = {'sir', 'jurgis', 'ahab', 'queequeg', 'leeward',
                    'stubb', 'play._', 'polonius', 'en', 'doth', 'laertes', 'hamlet', 'starbuck',
                    'pearl', 'hester', 'baskerville', 'dr', 'holmes', 'stapleton', 'coombe', 'devonshire',
-                   'did.', 'think.', 'watson', 'dr.', 'baker'}
-custom_non_noun = {'ye', 'nigh', 'thou'}
+                   'did.', 'think.', 'watson', 'dr.', 'baker', 'helsing', 'ca', 'godalming', 'lucy', 'huts',
+                   'van', 'jonathan', 'arthur', "'ve", 'mina', 'wo', 'm.', 'dantès', 'albert',
+                   'franz', 'danglars', 'morrel', 'heaven', 'valentine', 'leatherhead', 'castruccio',
+                   'rome', 'ai', 'quincey', 'renfield', 'whitby', 'fernand', 'hawkins', 'madam', 'mademoiselle', 'alexander',
+                   'fortune', 'perkins', 'curved', 'outlying', 'merripit',
+                   'barrymore', 'sake', 'selden', '_is_', 'woking'}
+custom_non_noun = {'ye', 'nigh', 'thou', 'gatsby', 'daisy', 'tom', 'jordan', 'wilson',
+'hester', 'prynne', 'pearl', 'dimmesdale', 'scarlet'}
 all_stop_words = basic_stopwords_set.union(
     punctuation_set).union(custom_stop_words)
 
@@ -164,8 +178,8 @@ def pos_quesiton(q):
         return words_best_associated_with_book_question(book_verbs, q)
 
     elif q["meta"]["sub_type"] == "noun":
-        nouns = [x[0] for x in get_tagged_words_for_book(q["correct_answer"])
-                 if x[1] == 'NOUN']
+        nouns = [word for word, tag in get_tagged_words_for_book(q["correct_answer"])
+                 if tag == 'NOUN' and word not in custom_non_noun]
         return dict(data=nltk.FreqDist(nouns).most_common(q["meta"]["num_words"]))
 
     raise Exception(
@@ -266,15 +280,6 @@ def get_tagged_words_for_book(book_id):
             if x[0] not in all_stop_words]
 
 
-def get_nouns(tagged_words):
-    return [word for word, tag in tagged_words if tag == 'NOUN'
-            and word not in custom_non_noun]
-
-
-def get_verbs(tagged_words):
-    return [x[0] for x in tagged_words if x[1] == 'VERB']
-
-
 def process_question(q):
     if q["meta"]["type"] == "pos-question":
         question_res = pos_quesiton(q)
@@ -328,7 +333,9 @@ def build_game(path_to_game_json):
 
 def main():
     games = [build_game('book_data/game_1.json'),
-             build_game('book_data/game_2.json')]
+             build_game('book_data/game_2.json'),
+             build_game('book_data/game_3.json'),
+             build_game('book_data/game_4.json')]
 
     output_path = Path.cwd().parent.parent / 'public' / 'data'
     output_path.mkdir(parents=True, exist_ok=True)

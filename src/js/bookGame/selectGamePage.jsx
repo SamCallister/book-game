@@ -27,7 +27,8 @@ const styles = makeStyles((theme) => ({
 	},
 	twoQuizRow: {
 		display: "flex",
-		justifyContent: "space-around"
+		justifyContent: "space-around",
+		marginBottom: theme.spacing(6)
 	}
 }));
 
@@ -69,7 +70,7 @@ function SelectGamePage(props) {
 		{quizGroups.map((groupItems, groupIndex) => {
 			return (<div key={groupIndex} className={s.twoQuizRow}>
 				{groupItems.map((d, groupItemIndex) => {
-					return buildBookGameSelection(d, groupIndex + groupItemIndex);
+					return buildBookGameSelection(d, (2 * groupIndex) + groupItemIndex);
 				})}
 			</div>)
 

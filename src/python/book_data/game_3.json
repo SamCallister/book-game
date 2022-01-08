@@ -1,28 +1,28 @@
 {
     "books": [
         {
-            "title": "Frankenstein; Or, The Modern Prometheus",
-            "author": "Mary Wollstonecraft Shelley",
-            "img": "frankenstien.jpg",
-            "id": 84
+            "title": "Dracula",
+            "author": "Bram Stoker",
+            "img": "dracula.jpg",
+            "id": 345
         },
         {
-            "title": "The Scarlet Letter",
-            "author": "Nathaniel Hawthorne",
-            "img": "scarlet_letter.jpg",
-            "id": 33
+            "title": "Heart of Darkness",
+            "author": "Joseph Conrad",
+            "img": "heart_of_darkness.jpg",
+            "id": 219
         },
         {
-            "title": "The Hound of the Baskervilles",
-            "author": "Arthur Conan Doyle",
-            "img": "hound.jpg",
-            "id": 2852
+            "title": "The Great Gatsby",
+            "author": "F. Scott Fitzgerald",
+            "img": "great_gatsby.jpg",
+            "id": 64317
         },
         {
-            "title": "The Jungle",
-            "author": "Upton Sinclair",
-            "img": "the_jungle.jpg",
-            "id": 140
+            "title": "The Count of Monte Cristo",
+            "author": "Alexandre Dumas",
+            "img": "monte_cristo.jpg",
+            "id": 1184
         }
     ],
     "questions": [
@@ -33,7 +33,7 @@
                 "num_words": 20,
                 "display": "cloud"
             },
-            "correct_answer": 2852
+            "correct_answer": 64317
         },
         {
             "text": "These verbs are unique to which book?",
@@ -42,7 +42,7 @@
                 "num_words": 10,
                 "display": "bar"
             },
-            "correct_answer": 33
+            "correct_answer": 345
         },
         {
             "text": "These words are best associated with which book?",
@@ -51,7 +51,7 @@
                 "display": "cloud",
                 "num_words": 20
             },
-            "correct_answer": 140
+            "correct_answer": 1184
         },
         {
             "text": "Which book has the longest median sentence length?",
@@ -72,7 +72,7 @@
                 "num_words": 12,
                 "display": "bar"
             },
-            "correct_answer": 2852
+            "correct_answer": 1184
         },
         {
             "text": "These words are unique to which book?",
@@ -80,7 +80,7 @@
                 "type": "unique-most-common",
                 "num_words": 10
             },
-            "correct_answer": 140
+            "correct_answer": 219
         },
         {
             "text": "These long words are unique to which book?",
@@ -88,7 +88,7 @@
                 "type": "unique-longest",
                 "num_words": 20
             },
-            "correct_answer": 84
+            "correct_answer": 64317
         },
         {
             "text": "These adjectives are unique to which book?",
@@ -98,7 +98,7 @@
                 "num_words": 12,
                 "display": "bar"
             },
-            "correct_answer": 140
+            "correct_answer": 345
         },
         {
             "text": "These nouns are commonly found in which book?",
@@ -108,7 +108,7 @@
                 "num_words": 10,
                 "display": "bar"
             },
-            "correct_answer": 33
+            "correct_answer": 64317
         }
     ]
 }
