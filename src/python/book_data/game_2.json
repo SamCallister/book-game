@@ -1,7 +1,7 @@
 {
     "books": [
         {
-            "title": "Frankenstein; Or, The Modern Prometheus",
+            "title": "Frankenstein",
             "author": "Mary Wollstonecraft Shelley",
             "img": "frankenstien.jpg",
             "id": 84

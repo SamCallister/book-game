@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import Typography from '@material-ui/core/Typography';
 
 import Container from '@material-ui/core/Container';
-import { chunk } from 'lodash';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { chunk, merge } from 'lodash';
 
 const styles = makeStyles((theme) => ({
 	container: {
@@ -13,11 +14,14 @@ const styles = makeStyles((theme) => ({
 		textAlign: "center",
 		margin: theme.spacing(2)
 	},
-	bookGameContainer: {
-	},
 	bookImage: {
 		width: "200px",
 		height: "280px",
+		margin: theme.spacing(1)
+	},
+	bookImageSmall: {
+		width: "140px",
+		height: "204px",
 		margin: theme.spacing(1)
 	},
 	linkContainer: {
@@ -35,25 +39,33 @@ const styles = makeStyles((theme) => ({
 
 function SelectGamePage(props) {
 	const s = styles();
+	const isDesktop = useMediaQuery('(min-width:930px)');
 	const { games } = props;
+	const indexedGames = games.map((d, i) => {
+		return merge({ gameIndex: i }, d);
 
-	const quizGroups = chunk(games, 2);
+	});
 
-	const buildBookGameSelection = (singleGame, gameIndex) => {
-		const { books } = singleGame;
+	const quizGroups = chunk(
+		indexedGames,
+		isDesktop ? 2 : 1
+	);
+
+	const buildBookGameSelection = (singleGame) => {
+		const { books, gameIndex } = singleGame;
 		return (
-			<div key={gameIndex} className={s.bookGameContainer}>
+			<div key={gameIndex}>
 				<div>
 					{books.slice(0, 2).map((d, i) => {
 						return (<span key={i}>
-							<img className={s.bookImage} src={`img/${d.img}`}></img>
+							<img className={ isDesktop ? s.bookImage:s.bookImageSmall} src={`img/${d.img}`}></img>
 						</span>)
 					})}
 				</div>
 				<div>
 					{books.slice(2, 4).map((d, i) => {
 						return (<span key={i}>
-							<img className={s.bookImage} src={`img/${d.img}`}></img>
+							<img className={isDesktop ? s.bookImage:s.bookImageSmall} src={`img/${d.img}`}></img>
 						</span>)
 					})}
 				</div>
@@ -69,8 +81,8 @@ function SelectGamePage(props) {
 		</Typography></div>
 		{quizGroups.map((groupItems, groupIndex) => {
 			return (<div key={groupIndex} className={s.twoQuizRow}>
-				{groupItems.map((d, groupItemIndex) => {
-					return buildBookGameSelection(d, (2 * groupIndex) + groupItemIndex);
+				{groupItems.map((d) => {
+					return buildBookGameSelection(d);
 				})}
 			</div>)
 

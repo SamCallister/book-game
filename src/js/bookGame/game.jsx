@@ -19,7 +19,8 @@ const styles = makeStyles(() => ({
 		justifyContent: "center"
 	},
 	content: {
-		flexGrow: 0.2
+		flexBasis: "90%",
+		maxWidth: "620px"
 	},
 	arrowsContainer: {
 		display: "flex",
@@ -28,7 +29,6 @@ const styles = makeStyles(() => ({
 	},
 	hide: { visibility: "hidden" }
 }));
-
 
 
 function Game(props) {

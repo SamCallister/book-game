@@ -10,7 +10,10 @@ const styles = makeStyles((theme) => ({
 	cardContainer: {
 		marginTop: theme.spacing(4),
 		marginBottom: theme.spacing(4),
-		width: "70%"
+		width: "70%",
+		[theme.breakpoints.down('sm')]: {
+			width: "100%"
+		}
 	},
 	cardOverride: {
 		padding: theme.spacing(2)
@@ -35,10 +38,20 @@ const styles = makeStyles((theme) => ({
 		fontSize: "x-large"
 	},
 	gameOverButtonsContainer: {
-		marginTop: theme.spacing(3)
+		marginTop: theme.spacing(3),
+		display: "flex",
+		[theme.breakpoints.down('sm')]: {
+			flexDirection: "column",
+			alignItems: "center"
+		}
 	},
 	gameOverShowQuestionsButton: {
-		marginRight: theme.spacing(2)
+		[theme.breakpoints.up('sm')]: {
+			marginRight: theme.spacing(2)
+		},
+		[theme.breakpoints.down('sm')]: {
+			marginBottom: theme.spacing(2)
+		}
 	},
 	anotherQuizBottomContainer: {
 		textAlign: "center",
@@ -47,6 +60,7 @@ const styles = makeStyles((theme) => ({
 	selectAnotherQuizText: {
 		fontSize: "large"
 	},
+	selectAnotherByButton: { paddingTop: "4px" },
 	hide: { visibility: "hidden" }
 }));
 
@@ -68,7 +82,7 @@ export default function GameOver(props) {
 							<Button variant="outlined"
 								className={s.gameOverShowQuestionsButton}
 								onClick={() => setShowQuestions(true)}>Show Questions</Button>
-							<span className={s.selectAnotherQuizText}><Link to="/">Select another quiz</Link></span>
+							<div className={`${s.selectAnotherQuizText} ${s.selectAnotherByButton}`}><Link to="/">Select another quiz</Link></div>
 						</div>
 					</div>
 				</Card>
