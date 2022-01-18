@@ -13,6 +13,6 @@ module.exports = merge(common, {
 		liveReload: true,
 		watchFiles: ['public/index.html', 'src/js/**/*.js'],
 		static: { serveIndex: false },
-		port: 4000
+		port: 4500
 	}
 });

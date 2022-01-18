@@ -68,9 +68,9 @@ const styles = makeStyles((theme) => ({
 export default function GameOver(props) {
 
 	const s = styles();
-	const { gameData, questionAnswered, answers, numCorrect, numQuestions } = props;
+	const { gameData, questionAnswered, answers, numCorrect, numQuestions, gameSelectUrl } = props;
 	const [showQuestions, setShowQuestions] = React.useState(false);
-
+	
 	return (<div className={s.content}>
 		<div className={s.gameOverContainer}>
 			<div className={s.cardContainer}>
@@ -82,7 +82,7 @@ export default function GameOver(props) {
 							<Button variant="outlined"
 								className={s.gameOverShowQuestionsButton}
 								onClick={() => setShowQuestions(true)}>Show Questions</Button>
-							<div className={`${s.selectAnotherQuizText} ${s.selectAnotherByButton}`}><Link to="/">Select another quiz</Link></div>
+							<div className={`${s.selectAnotherQuizText} ${s.selectAnotherByButton}`}><Link to={gameSelectUrl}>Select another quiz</Link></div>
 						</div>
 					</div>
 				</Card>
@@ -99,7 +99,7 @@ export default function GameOver(props) {
 			}
 			)}
 			<div className={`${s.anotherQuizBottomContainer} ${s.selectAnotherQuizText}`}>
-				<Link to="/">Select another quiz</Link>
+				<Link to={gameSelectUrl}>Select another quiz</Link>
 			</div>
 		</div>
 

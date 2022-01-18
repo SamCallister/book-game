@@ -34,7 +34,7 @@ const styles = makeStyles(() => ({
 function Game(props) {
 	const s = styles();
 	const params = useParams();
-	const { games } = props;
+	const { games, gameSelectUrl } = props;
 	const gameData = games[params.gameIndex];
 	const [currentQuestionIndex, setCurrentQuestionIndex, currentQuestionIndexRef] = useStateRef(0);
 	const [answeredUntil, setAnsweredUntil, answeredUntilRef] = useStateRef(0);
@@ -132,6 +132,7 @@ function Game(props) {
 				answers={answers}
 				numCorrect={numCorrect}
 				numQuestions={numQuestions}
+				gameSelectUrl={gameSelectUrl}
 			></GameOver>}
 		</Container>);
 }

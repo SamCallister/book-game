@@ -36,14 +36,16 @@ const styles = makeStyles((theme) => ({
 	}
 }));
 
+function buildBookImgUrl(baseURLToAssets, imgName) {
+	return `${baseURLToAssets}/img/${imgName}`;
+}
 
 function SelectGamePage(props) {
 	const s = styles();
 	const isDesktop = useMediaQuery('(min-width:930px)');
-	const { games } = props;
+	const { games, baseURLToAssets, baseUrl } = props;
 	const indexedGames = games.map((d, i) => {
 		return merge({ gameIndex: i }, d);
-
 	});
 
 	const quizGroups = chunk(
@@ -58,22 +60,21 @@ function SelectGamePage(props) {
 				<div>
 					{books.slice(0, 2).map((d, i) => {
 						return (<span key={i}>
-							<img className={ isDesktop ? s.bookImage:s.bookImageSmall} src={`img/${d.img}`}></img>
+							<img className={isDesktop ? s.bookImage : s.bookImageSmall} src={buildBookImgUrl(baseURLToAssets, d.img)}></img>
 						</span>)
 					})}
 				</div>
 				<div>
 					{books.slice(2, 4).map((d, i) => {
 						return (<span key={i}>
-							<img className={isDesktop ? s.bookImage:s.bookImageSmall} src={`img/${d.img}`}></img>
+							<img className={isDesktop ? s.bookImage : s.bookImageSmall} src={buildBookImgUrl(baseURLToAssets, d.img)}></img>
 						</span>)
 					})}
 				</div>
-				<div className={s.linkContainer}><Link to={`/quiz/${gameIndex}`}>Start Quiz</Link></div>
+				<div className={s.linkContainer}><Link to={`${baseUrl === "/" ? "" : baseUrl}/quiz/${gameIndex}`}>Start Quiz</Link></div>
 			</div>
 		)
 	};
-
 
 	return (<Container maxWidth="lg" className={s.container}>
 		<div className={s.explainerTextContainer}> <Typography variant="h4" gutterBottom component="div">
@@ -87,10 +88,7 @@ function SelectGamePage(props) {
 			</div>)
 
 		})}
-
-
-
-	</Container>)
+	</Container>);
 }
 
 export default SelectGamePage;

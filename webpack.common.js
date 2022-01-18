@@ -9,6 +9,8 @@ module.exports = {
 	output: {
 		path: path.join(__dirname, 'dist/'),
 		filename: '[name].js',
+		library: 'bookGame',
+		libraryTarget: 'var'
 	},
 	module: {
 		rules: [{
