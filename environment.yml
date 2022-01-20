@@ -3,6 +3,8 @@ dependencies:
   - python=3.8
   - pandas
   - pip:
-    - nltk
-    - Gutenberg=0.8.1
-    - scikit-learn-1.0.1
+      - nltk
+      - Gutenberg=0.8.1
+      - scikit-learn-1.0.1
+      - flake8
+      - black

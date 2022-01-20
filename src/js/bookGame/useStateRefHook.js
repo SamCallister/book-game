@@ -1,15 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
 function useStateRef(initialValue) {
-	const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState(initialValue);
 
-	const ref = useRef(value);
+  const ref = useRef(value);
 
-	useEffect(() => {
-		ref.current = value;
-	}, [value]);
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
 
-	return [value, setValue, ref];
+  return [value, setValue, ref];
 }
 
 export default useStateRef;

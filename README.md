@@ -47,6 +47,12 @@ npm install
 npm start
 ```
 
+## Linting/Formatting
+
+```
+./scripts/lint_and_format.sh
+```
+
 ## TODO
 
 - Explore different POS taggers
