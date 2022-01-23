@@ -1,11 +1,19 @@
 import * as d3 from "d3";
 import svgUtil from "./svgUtil";
+import { QuestionData } from "./components/QuestionInterfaces";
 
-const animationDuration = 2000;
+const animationDuration = 1000;
 
-function draw(svg, questionData, width, height, correctAnswerLineLabel) {
-  const otherPoints = questionData.data.other_points;
-  const answerPoints = questionData.data.answer_points;
+function draw(
+  // eslint-disable-next-line
+  svg: d3.Selection<any, unknown, null, undefined>,
+  questionData: QuestionData,
+  width: number,
+  height: number,
+  correctAnswerLineLabel: string
+) {
+  const otherPoints = questionData.data_other_and_answer.other_points;
+  const answerPoints = questionData.data_other_and_answer.answer_points;
 
   const combinedX = otherPoints
     .map((d) => d[0])
@@ -91,7 +99,8 @@ function draw(svg, questionData, width, height, correctAnswerLineLabel) {
     .attr("stroke-dashoffset", (_, i) => {
       return paths.nodes()[i].getTotalLength();
     })
-    .transition(d3.easeLinear)
+    .transition()
+    .ease(d3.easeLinear)
     .duration(animationDuration)
     .attr("stroke-dashoffset", 0);
 

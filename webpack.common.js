@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
 	entry: {
 		bookGame: path.join(
-			__dirname, "src", "js", "bookGame", "bookGameIndex.js"
+			__dirname, "src", "js", "bookGame", "bookGameIndex.tsx"
 		)
 	},
 	output: {
@@ -13,37 +13,35 @@ module.exports = {
 		libraryTarget: 'var'
 	},
 	module: {
-		rules: [{
-			test: /\.jsx?$/,
-			exclude: [
-				path.resolve(__dirname, "node_modules"),
-			],
-			include: path.resolve(__dirname, "src"),
-			use: ["babel-loader"]
-		},
-		{
-			test: /\.(png|jpg|gif)$/i,
-			use: [
-				{
-					loader: 'url-loader',
-					options: {
-						limit: 5000,
+		rules: [
+			{
+				test: /\.(png|jpg|gif)$/i,
+				use: [
+					{
+						loader: 'url-loader',
+						options: {
+							limit: 5000,
+						},
 					},
-				},
-			],
-		},
-		{
-			test: /\.css$/i,
-			exclude: [
-				path.resolve(__dirname, "node_modules"),
-			],
-			include: path.resolve(__dirname, "src"),
-			use: ['style-loader', 'css-loader'],
-		},
+				],
+			},
+			{
+				test: /\.css$/i,
+				exclude: [
+					path.resolve(__dirname, "node_modules"),
+				],
+				include: path.resolve(__dirname, "src"),
+				use: ['style-loader', 'css-loader'],
+			},
+			{
+				test: /\.tsx?$/,
+				use: 'ts-loader',
+				exclude: /node_modules/,
+			}
 		],
 	},
 	resolve: {
-		extensions: [".json", ".js", ".jsx"],
+		extensions: [".json", ".js", ".jsx", '.tsx', '.ts'],
 	},
 
 };

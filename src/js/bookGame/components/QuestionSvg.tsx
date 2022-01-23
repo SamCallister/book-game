@@ -1,10 +1,11 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import wordCloud from "./../wordCloud.js";
-import kde from "./../kde.js";
-import horizontalBar from "./../horizontalBar.js";
-import Question from "./Question.jsx";
+import wordCloud from "../wordCloud";
+import kde from "../kde";
+import horizontalBar from "../horizontalBar";
+import Question from "./Question";
 import * as d3 from "d3";
+import { QuestionProps } from "./QuestionInterfaces";
 
 const width = 500;
 const height = 300;
@@ -15,7 +16,7 @@ const styles = makeStyles(() => ({
   },
 }));
 
-function QuestionSvg(props) {
+function QuestionSvg(props: QuestionProps) {
   const { data, questionAnswered, providedAnswer } = props;
   const s = styles();
   const d3Container = useRef(null);
@@ -66,7 +67,6 @@ function QuestionSvg(props) {
           ref={d3Container}
           preserveAspectRatio="xMinYMin meet"
           viewBox={`0 0 ${width} ${height}`}
-          className={s.svgResponsive}
         ></svg>
       </div>
       <Question

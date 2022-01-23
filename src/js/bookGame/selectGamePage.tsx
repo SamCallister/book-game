@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { chunk, merge } from "lodash";
+import { GameI } from "./GameInterfaces";
 
 const styles = makeStyles((theme) => ({
   container: {},
@@ -35,11 +36,21 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-function buildBookImgUrl(baseURLToAssets, imgName) {
+function buildBookImgUrl(baseURLToAssets: string, imgName: string) {
   return `${baseURLToAssets}/img/${imgName}`;
 }
 
-function SelectGamePage(props) {
+interface SelectGameProps {
+  baseURLToAssets: string;
+  baseUrl: string;
+  games: [GameI];
+}
+
+interface IndexedGameI extends GameI {
+  gameIndex: number;
+}
+
+function SelectGamePage(props: SelectGameProps) {
   const s = styles();
   const isDesktop = useMediaQuery("(min-width:930px)");
   const { games, baseURLToAssets, baseUrl } = props;
@@ -49,7 +60,7 @@ function SelectGamePage(props) {
 
   const quizGroups = chunk(indexedGames, isDesktop ? 2 : 1);
 
-  const buildBookGameSelection = (singleGame) => {
+  const buildBookGameSelection = (singleGame: IndexedGameI) => {
     const { books, gameIndex } = singleGame;
     return (
       <div key={gameIndex}>

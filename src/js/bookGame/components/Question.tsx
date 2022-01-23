@@ -6,6 +6,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Typography from "@material-ui/core/Typography";
 import Check from "@material-ui/icons/Check";
 import Clear from "@material-ui/icons/Clear";
+import { QuestionProps } from "./QuestionInterfaces";
 
 const useStyles = makeStyles((theme) => ({
   answersContainer: {
@@ -47,14 +48,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Question(props) {
+type ChoiceStatus = "correct" | "wrong" | "correctNotChosen" | "regular";
+
+export default function Question(props: QuestionProps) {
   const { data, questionAnswered, providedAnswer } = props;
   const s = useStyles();
   const [value, setValue] = React.useState(
     providedAnswer === undefined ? "" : providedAnswer
   );
 
-  const handleRadioChange = (event) => {
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // do nothing if question is answered
     if (value) {
       return;
@@ -63,11 +66,15 @@ export default function Question(props) {
     const answerId = event.target.value;
     setValue(answerId);
 
-    questionAnswered(answerId == data.correct_answer.id, answerId);
+    questionAnswered(parseInt(answerId) === data.correct_answer.id, answerId);
   };
 
-  const getChoiceStatus = (questionId, correctAnswer, selectedChoice) => {
-    if (questionId == selectedChoice) {
+  const getChoiceStatus = (
+    questionId: number,
+    correctAnswer: number,
+    selectedChoice: string
+  ): ChoiceStatus => {
+    if (questionId == parseInt(selectedChoice)) {
       return correctAnswer == questionId ? "correct" : "wrong";
     } else if (selectedChoice.length && questionId == correctAnswer) {
       // show correct answer when a choice is selected
@@ -77,7 +84,7 @@ export default function Question(props) {
     }
   };
 
-  const getClassBasedOnAnswer = (choiceStatus) => {
+  const getClassBasedOnAnswer = (choiceStatus: ChoiceStatus) => {
     return {
       correct: `${s.regularChoice} ${s.correctAnswer}`,
       correctNotChosen: `${s.regularChoice} ${s.correctAnswer}`,
@@ -86,10 +93,12 @@ export default function Question(props) {
     }[choiceStatus];
   };
 
-  const buildLabel = (title, choiceStatus) => {
+  const buildLabel = (title: string, choiceStatus: ChoiceStatus) => {
     const icon = {
       correct: <Check classes={{ root: s.iconPos }}></Check>,
       wrong: <Clear classes={{ root: s.iconPos }}></Clear>,
+      correctNotChosen: null,
+      regular: null,
     }[choiceStatus];
 
     return (

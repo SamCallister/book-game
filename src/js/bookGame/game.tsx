@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import useStateRef from "./useStateRefHook.js";
-import QuestionSvg from "./components/QuestionSvg.jsx";
+import useStateRef from "./useStateRefHook";
+import QuestionSvg from "./components/QuestionSvg";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import { useParams } from "react-router-dom";
@@ -10,7 +10,9 @@ import IconButton from "@material-ui/core/IconButton";
 import ArrowForward from "@material-ui/icons/ArrowForward";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Typography from "@material-ui/core/Typography";
-import GameOver from "./gameOver.jsx";
+import GameOver from "./gameOver";
+import { GameI } from "./GameInterfaces";
+import { AnswerMap } from "./components/QuestionInterfaces";
 
 const styles = makeStyles(() => ({
   container: {
@@ -29,11 +31,16 @@ const styles = makeStyles(() => ({
   hide: { visibility: "hidden" },
 }));
 
-function Game(props) {
+interface GameProps {
+  games: [GameI];
+  gameSelectUrl: string;
+}
+
+function Game(props: GameProps) {
   const s = styles();
   const params = useParams();
   const { games, gameSelectUrl } = props;
-  const gameData = games[params.gameIndex];
+  const gameData = games[parseInt(params.gameIndex)];
   const [
     currentQuestionIndex,
     setCurrentQuestionIndex,
@@ -42,18 +49,22 @@ function Game(props) {
   const [answeredUntil, setAnsweredUntil, answeredUntilRef] = useStateRef(0);
   const [numCorrect, setNumCorrect] = useState(0);
   const [gameOver, setGameOver] = useState(false);
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers]: [
+    AnswerMap,
+    // eslint-disable-next-line
+    React.Dispatch<React.SetStateAction<unknown>>
+  ] = useState({});
 
   const numQuestions = gameData.questions.length;
 
-  const questionAnswered = (wasCorrect, answer) => {
+  const questionAnswered = (wasCorrect: boolean, answer: string) => {
     setAnsweredUntil(currentQuestionIndexRef.current + 1);
 
     if (wasCorrect) {
       setNumCorrect(numCorrect + 1);
     }
 
-    const newAnswer = {};
+    const newAnswer: AnswerMap = {};
     newAnswer[currentQuestionIndex] = answer;
 
     setAnswers({ ...answers, ...newAnswer });
@@ -81,14 +92,14 @@ function Game(props) {
     answeredUntilRef.current > currentQuestionIndexRef.current;
   const answeredCurrentQuestion = answeredUntil > currentQuestionIndex;
 
-  const handleKeyDownEvent = ({ keyCode }) => {
+  function handleKeyDownEvent(this: Window, { keyCode }: KeyboardEvent) {
     if (includes([39, 13], keyCode) && answeredCurrentQuestionRef()) {
       nextQuestion();
     } else if (keyCode === 37 && !onFirstQuestionRef()) {
       // go back a question
       prevQuestion();
     }
-  };
+  }
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDownEvent);

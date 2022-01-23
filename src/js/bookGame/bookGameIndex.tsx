@@ -1,16 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Game from "./game.jsx";
-import SelectGamePage from "./selectGamePage.jsx";
+import Game from "./game";
+import SelectGamePage from "./selectGamePage";
 import "./styles.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { GameI } from "./GameInterfaces";
 
-export function buildGame(baseUrlToAssets, divId) {
+export function buildGame(baseUrlToAssets: string, divId: string) {
   fetch(`${baseUrlToAssets}/data/games.json`)
     .then((res) => {
       return res.json();
     })
-    .then((jsonData) => {
+    .then((jsonData: [GameI]) => {
       const currentPath = document.location.pathname;
 
       ReactDOM.render(

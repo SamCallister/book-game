@@ -1,12 +1,19 @@
 import * as d3 from "d3";
 import svgUtil from "./svgUtil";
+import { QuestionData } from "./components/QuestionInterfaces";
 
 const yPadding = 0.1;
 const animationDuration = 1000;
 
-function draw(svg, questionData, width, height) {
+function draw(
+  // eslint-disable-next-line
+  svg: d3.Selection<any, unknown, null, undefined>,
+  questionData: QuestionData,
+  width: number,
+  height: number
+) {
   //sort bars based on value
-  const data = questionData.data.sort(function (a, b) {
+  const data = questionData.data_word_and_freq.sort(function (a, b) {
     return d3.descending(a[1], b[1]);
   });
 
@@ -35,7 +42,8 @@ function draw(svg, questionData, width, height) {
     .attr("y", (d) => y(d[0]))
     .attr("width", 0)
     .attr("height", y.bandwidth())
-    .transition(d3.easeLinear)
+    .transition()
+    .ease(d3.easeLinear)
     .duration(animationDuration)
     .attr("width", (d) => x(d[1]) - x(0));
 

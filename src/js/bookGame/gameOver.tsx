@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
-import QuestionSvg from "./components/QuestionSvg.jsx";
+import QuestionSvg from "./components/QuestionSvg";
+import { GameI } from "./GameInterfaces";
+import {
+  QuestionAnsweredFunc,
+  AnswerMap,
+} from "./components/QuestionInterfaces";
 
 const styles = makeStyles((theme) => ({
   cardContainer: {
@@ -63,7 +68,16 @@ const styles = makeStyles((theme) => ({
   hide: { visibility: "hidden" },
 }));
 
-export default function GameOver(props) {
+interface GameOverProps {
+  gameData: GameI;
+  questionAnswered: QuestionAnsweredFunc;
+  answers: AnswerMap;
+  numCorrect: number;
+  numQuestions: number;
+  gameSelectUrl: string;
+}
+
+export default function GameOver(props: GameOverProps) {
   const s = styles();
   const {
     gameData,

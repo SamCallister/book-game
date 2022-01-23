@@ -323,7 +323,7 @@ def word_length_question(q):
 
     return dict(
         correct_answer=q["answers"][max_avg_index],
-        data=dict(
+        data_all_answer=dict(
             all_points=unique_and_score_kde(kde_all, all_book_length),
             answer_points=unique_and_score_kde(kde_answer, answer_word_lengh),
         ),
@@ -364,7 +364,7 @@ def sentence_length_question(q, min_or_max):
 
     return dict(
         correct_answer=q["answers"][answer_index],
-        data=dict(
+        data_other_and_answer=dict(
             other_points=unique_and_score_kde(kde_others, other_sent_length),
             answer_points=unique_and_score_kde(kde_answer, answer_sent_length),
         ),
@@ -394,7 +394,7 @@ def words_best_associated_with_book_question(words_per_book, q):
     index_of_correct_answer = get_correct_answer_index(q)
     freq_dist = nltk.FreqDist(words_per_book[index_of_correct_answer])
 
-    return dict(data=[(w, freq_dist.get(w)) for w in chosen_words])
+    return dict(data_word_and_freq=[(w, freq_dist.get(w)) for w in chosen_words])
 
 
 def pos_quesiton(q):
@@ -412,7 +412,9 @@ def pos_quesiton(q):
             for word, tag in get_tagged_words_for_book(q["correct_answer"])
             if tag == "NOUN" and word not in custom_non_noun
         ]
-        return dict(data=nltk.FreqDist(nouns).most_common(q["meta"]["num_words"]))
+        return dict(
+            data_word_and_freq=nltk.FreqDist(nouns).most_common(q["meta"]["num_words"])
+        )
 
     raise Exception(
         f"Question subtype {q['meta']['sub_type']} for meta {q['meta']} not supported"
@@ -525,7 +527,7 @@ def process_question(q):
         question_res = pos_quesiton(q)
         return {
             **q,
-            **dict(data=question_res["data"]),
+            **dict(data_word_and_freq=question_res["data_word_and_freq"]),
             **dict(
                 correct_answer=q.get(
                     "correct_answer", question_res.get("correct_answer")
@@ -533,7 +535,7 @@ def process_question(q):
             ),
         }
     elif q["meta"]["type"] == "tf-idf":
-        return {**q, **dict(data=get_tf_idf_question(q))}
+        return {**q, **dict(data_word_and_freq=get_tf_idf_question(q))}
     elif q["meta"]["type"] == "longest-median-sent-length":
         return {**q, **sentence_length_question(q, "max")}
     elif q["meta"]["type"] == "shortest-median-sent-length":
@@ -541,13 +543,13 @@ def process_question(q):
     elif q["meta"]["type"] == "word-length":
         return {**q, **word_length_question(q)}
     elif q["meta"]["type"] == "unique-most-common":
-        return {**q, **dict(data=get_unique_most_common(q))}
+        return {**q, **dict(data_word_and_freq=get_unique_most_common(q))}
     elif q["meta"]["type"] == "unique-verb":
-        return {**q, **dict(data=get_unique_verbs(q))}
+        return {**q, **dict(data_word_and_freq=get_unique_verbs(q))}
     elif q["meta"]["type"] == "unique-adj":
-        return {**q, **dict(data=get_unique_adj(q))}
+        return {**q, **dict(data_word_and_freq=get_unique_adj(q))}
     elif q["meta"]["type"] == "unique-longest":
-        return {**q, **dict(data=get_unique_longest(q))}
+        return {**q, **dict(data_words_only=get_unique_longest(q))}
 
     raise Exception(
         f"Question type {q['meta']['type']} for meta {q['meta']} not supported"
