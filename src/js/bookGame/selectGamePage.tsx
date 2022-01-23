@@ -45,6 +45,7 @@ interface SelectGameProps {
   baseURLToAssets: string;
   baseUrl: string;
   games: [GameI];
+  aboutGameLink?: string;
 }
 
 interface IndexedGameI extends GameI {
@@ -54,7 +55,7 @@ interface IndexedGameI extends GameI {
 function SelectGamePage(props: SelectGameProps) {
   const s = styles();
   const isDesktop = useMediaQuery("(min-width:930px)");
-  const { games, baseURLToAssets, baseUrl } = props;
+  const { games, baseURLToAssets, baseUrl, aboutGameLink } = props;
   const indexedGames = games.map((d, i) => {
     return merge({ gameIndex: i }, d);
   });
@@ -112,6 +113,11 @@ function SelectGamePage(props: SelectGameProps) {
         <Typography variant="h4" gutterBottom component="div">
           Each question in a quiz is based on the four books above it.
         </Typography>
+        {aboutGameLink && (
+          <Typography variant="subtitle1" gutterBottom component="div">
+            Read about the game <a href={aboutGameLink}>here</a>
+          </Typography>
+        )}
       </div>
       {quizGroups.map((groupItems, groupIndex) => {
         return (

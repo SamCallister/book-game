@@ -15,7 +15,11 @@ const theme = createTheme({
   },
 });
 
-export function buildGame(baseUrlToAssets: string, divId: string) {
+export function buildGame(
+  baseUrlToAssets: string,
+  divId: string,
+  aboutGameLink?: string
+) {
   fetch(`${baseUrlToAssets}/data/games.json`)
     .then((res) => {
       return res.json();
@@ -34,6 +38,7 @@ export function buildGame(baseUrlToAssets: string, divId: string) {
                     games={jsonData}
                     baseUrl={currentPath}
                     baseURLToAssets={baseUrlToAssets}
+                    aboutGameLink={aboutGameLink}
                   ></SelectGamePage>
                 }
               />
