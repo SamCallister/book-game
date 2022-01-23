@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
   iconPos: {
     position: "absolute",
-    right: "-28px",
+    left: "-28px",
   },
 }));
 

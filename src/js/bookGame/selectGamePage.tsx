@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 
 import Container from "@material-ui/core/Container";
@@ -34,6 +34,7 @@ const styles = makeStyles((theme) => ({
     justifyContent: "space-around",
     marginBottom: theme.spacing(6),
   },
+  gameImageContainer: { cursor: "pointer" },
 }));
 
 function buildBookImgUrl(baseURLToAssets: string, imgName: string) {
@@ -58,12 +59,21 @@ function SelectGamePage(props: SelectGameProps) {
     return merge({ gameIndex: i }, d);
   });
 
+  const navigate = useNavigate();
+
   const quizGroups = chunk(indexedGames, isDesktop ? 2 : 1);
 
   const buildBookGameSelection = (singleGame: IndexedGameI) => {
     const { books, gameIndex } = singleGame;
+    const fullGameUrl = `${baseUrl === "/" ? "" : baseUrl}/quiz/${gameIndex}`;
     return (
-      <div key={gameIndex}>
+      <div
+        key={gameIndex}
+        className={s.gameImageContainer}
+        onClick={() => {
+          navigate(fullGameUrl);
+        }}
+      >
         <div>
           {books.slice(0, 2).map((d, i) => {
             return (
@@ -89,9 +99,7 @@ function SelectGamePage(props: SelectGameProps) {
           })}
         </div>
         <div className={s.linkContainer}>
-          <Link to={`${baseUrl === "/" ? "" : baseUrl}/quiz/${gameIndex}`}>
-            Start Quiz
-          </Link>
+          <Link to={fullGameUrl}>Start Quiz</Link>
         </div>
       </div>
     );

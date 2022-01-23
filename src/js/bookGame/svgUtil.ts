@@ -7,7 +7,7 @@ const margin = {
   left: 100,
 };
 
-const animationDuration = 500;
+const animationDuration = 1000;
 
 interface AddLabelFunc {
   (): void;
