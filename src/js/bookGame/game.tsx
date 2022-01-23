@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import useStateRef from "./useStateRefHook";
 import QuestionSvg from "./components/QuestionSvg";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import { useParams } from "react-router-dom";
-import { includes } from "lodash";
+import { includes, max } from "lodash";
 
 import IconButton from "@material-ui/core/IconButton";
 import ArrowForward from "@material-ui/icons/ArrowForward";
@@ -54,6 +54,7 @@ function Game(props: GameProps) {
     // eslint-disable-next-line
     React.Dispatch<React.SetStateAction<unknown>>
   ] = useState({});
+  const svgContainerRef = useRef(null);
 
   const numQuestions = gameData.questions.length;
 
@@ -71,6 +72,10 @@ function Game(props: GameProps) {
   };
 
   const nextQuestion = () => {
+    if (!answeredCurrentQuestionRef()) {
+      return;
+    }
+
     // handle if on final question here
     const nextQuestionIndex = currentQuestionIndexRef.current + 1;
     if (nextQuestionIndex == numQuestions) {
@@ -81,7 +86,7 @@ function Game(props: GameProps) {
   };
 
   const prevQuestion = () => {
-    const prevQuestionIndex = currentQuestionIndexRef.current - 1;
+    const prevQuestionIndex = max([currentQuestionIndexRef.current - 1, 0]);
 
     setCurrentQuestionIndex(prevQuestionIndex);
   };
@@ -93,7 +98,7 @@ function Game(props: GameProps) {
   const answeredCurrentQuestion = answeredUntil > currentQuestionIndex;
 
   function handleKeyDownEvent(this: Window, { keyCode }: KeyboardEvent) {
-    if (includes([39, 13], keyCode) && answeredCurrentQuestionRef()) {
+    if (includes([39, 13], keyCode)) {
       nextQuestion();
     } else if (keyCode === 37 && !onFirstQuestionRef()) {
       // go back a question
@@ -104,6 +109,10 @@ function Game(props: GameProps) {
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDownEvent);
 
+    // align question in viewport
+    const { top } = svgContainerRef.current.getBoundingClientRect();
+    window.scrollTo({ top: top });
+
     return () => {
       window.removeEventListener("keydown", handleKeyDownEvent);
     };
@@ -112,7 +121,7 @@ function Game(props: GameProps) {
   return (
     <Container maxWidth="lg" className={s.container}>
       {!gameOver && (
-        <div className={s.content}>
+        <div className={s.content} ref={svgContainerRef}>
           <QuestionSvg
             key={currentQuestionIndex + 100}
             data={gameData.questions[currentQuestionIndex]}

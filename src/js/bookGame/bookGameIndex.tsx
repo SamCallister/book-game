@@ -5,6 +5,15 @@ import SelectGamePage from "./selectGamePage";
 import "./styles.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { GameI } from "./GameInterfaces";
+import { createTheme, MuiThemeProvider } from "@material-ui/core/styles";
+
+const theme = createTheme({
+  typography: {
+    button: {
+      textTransform: "none",
+    },
+  },
+});
 
 export function buildGame(baseUrlToAssets: string, divId: string) {
   fetch(`${baseUrlToAssets}/data/games.json`)
@@ -15,29 +24,33 @@ export function buildGame(baseUrlToAssets: string, divId: string) {
       const currentPath = document.location.pathname;
 
       ReactDOM.render(
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path={currentPath}
-              element={
-                <SelectGamePage
-                  games={jsonData}
-                  baseUrl={currentPath}
-                  baseURLToAssets={baseUrlToAssets}
-                ></SelectGamePage>
-              }
-            />
-            <Route
-              path={`${currentPath}/quiz`}
-              element={<Game games={jsonData} gameSelectUrl={currentPath} />}
-            >
+        <MuiThemeProvider theme={theme}>
+          <BrowserRouter>
+            <Routes>
               <Route
-                path=":gameIndex"
-                element={<Game games={jsonData} gameSelectUrl={currentPath} />}
+                path={currentPath}
+                element={
+                  <SelectGamePage
+                    games={jsonData}
+                    baseUrl={currentPath}
+                    baseURLToAssets={baseUrlToAssets}
+                  ></SelectGamePage>
+                }
               />
-            </Route>
-          </Routes>
-        </BrowserRouter>,
+              <Route
+                path={`${currentPath}/quiz`}
+                element={<Game games={jsonData} gameSelectUrl={currentPath} />}
+              >
+                <Route
+                  path=":gameIndex"
+                  element={
+                    <Game games={jsonData} gameSelectUrl={currentPath} />
+                  }
+                />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </MuiThemeProvider>,
         document.getElementById(divId)
       );
     });
