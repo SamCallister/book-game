@@ -48,13 +48,14 @@ function Game(props: GameProps) {
   ] = useStateRef(0);
   const [answeredUntil, setAnsweredUntil, answeredUntilRef] = useStateRef(0);
   const [numCorrect, setNumCorrect] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [answers, setAnswers]: [
     AnswerMap,
     // eslint-disable-next-line
     React.Dispatch<React.SetStateAction<unknown>>
   ] = useState({});
-  const svgContainerRef = useRef(null);
+  const containerRef = useRef(null);
 
   const numQuestions = gameData.questions.length;
 
@@ -109,19 +110,24 @@ function Game(props: GameProps) {
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDownEvent);
 
-    // align question in viewport
-    const { top } = svgContainerRef.current.getBoundingClientRect();
-    window.scrollTo({ top: top });
-
     return () => {
       window.removeEventListener("keydown", handleKeyDownEvent);
     };
   }, []);
 
+  useEffect(() => {
+    if (containerRef.current && !scrolled) {
+      // align question in viewport
+      const { top } = containerRef.current.getBoundingClientRect();
+      window.scrollBy({ top: top - 5 });
+      setScrolled(true);
+    }
+  }, [containerRef.current]);
+
   return (
-    <Container maxWidth="lg" className={s.container}>
+    <Container maxWidth="lg" className={s.container} ref={containerRef}>
       {!gameOver && (
-        <div className={s.content} ref={svgContainerRef}>
+        <div className={s.content}>
           <QuestionSvg
             key={currentQuestionIndex + 100}
             data={gameData.questions[currentQuestionIndex]}
