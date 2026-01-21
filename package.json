@@ -5,7 +5,7 @@
 	"scripts": {
 		"start": "npx webpack serve -c webpack.dev.js",
 		"starter": "./node_modules/.bin/webpack --watch --config webpack.dev.js",
-		"build": "./node_modules/.bin/webpack --config webpack.prod.js",
+		"build": "./node_modules/.bin/webpack --config webpack.prod.js && cp public/index.html dist",
 		"pack": "./node_modules/.bin/webpack",
 		"lint": "npx eslint src/js"
 	},
